@@ -4,14 +4,22 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+
 
 import de.stuttgart.syzl3000.models.Recipe;
 import de.stuttgart.syzl3000.requests.RecipeApi;
 import de.stuttgart.syzl3000.requests.ServiceGenerator;
 import de.stuttgart.syzl3000.requests.response.RecipeResponse;
 import de.stuttgart.syzl3000.requests.response.RecipeSearchResponse;
+import de.stuttgart.syzl3000.viewmodels.RecipeListViewModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,15 +28,24 @@ public class RecipeListActivity extends BaseActivity {
 
     private static final String TAG = "RecipeListActivity";
 
+    private RecipeListViewModel mRecipeListViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
 
-        findViewById(R.id.test).setOnClickListener(new View.OnClickListener() {
+        mRecipeListViewModel = new ViewModelProvider(this).get(RecipeListViewModel.class);
+
+        subscribeObservers();
+    }
+
+    private void subscribeObservers() {
+        // the LiveData (a.k.a. the recipes) comes from the Repository, goes to the ViewModel and arrives / gets observered here in the Activity: (Client: DB / API ->) Repo -> ViewModel -> Activity
+        mRecipeListViewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
+
             @Override
-            public void onClick(View v) {
-                testRetrofitRequest();
+            public void onChanged(@Nullable List<Recipe> recipes) {
             }
         });
     }
