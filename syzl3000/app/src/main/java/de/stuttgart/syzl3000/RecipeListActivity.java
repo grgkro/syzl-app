@@ -1,43 +1,44 @@
 package de.stuttgart.syzl3000;
 
 import android.os.Bundle;
+import android.os.TestLooperManager;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 
 
+import de.stuttgart.syzl3000.adapters.OnRecipeListener;
+import de.stuttgart.syzl3000.adapters.RecipeRecyclerAdapter;
 import de.stuttgart.syzl3000.models.Recipe;
-import de.stuttgart.syzl3000.requests.RecipeApi;
-import de.stuttgart.syzl3000.requests.ServiceGenerator;
-import de.stuttgart.syzl3000.requests.response.RecipeResponse;
-import de.stuttgart.syzl3000.requests.response.RecipeSearchResponse;
+import de.stuttgart.syzl3000.util.Testing;
 import de.stuttgart.syzl3000.viewmodels.RecipeListViewModel;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class RecipeListActivity extends BaseActivity {
+public class RecipeListActivity extends BaseActivity implements OnRecipeListener {
 
     private static final String TAG = "RecipeListActivity";
 
     private RecipeListViewModel mRecipeListViewModel;
+    private RecyclerView mRecyclerView;
+    private RecipeRecyclerAdapter mRecipeRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
+        mRecyclerView = findViewById(R.id.recipe_list);
 
         mRecipeListViewModel = new ViewModelProvider(this).get(RecipeListViewModel.class);
 
+        initRecyclerView();
         subscribeObservers();
+        testRetrofitRequest();
     }
 
     private void subscribeObservers() {
@@ -46,60 +47,35 @@ public class RecipeListActivity extends BaseActivity {
 
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
+                if (recipes != null) {
+                    Testing.printRecipes(recipes, "recipes test");
+                    mRecipeRecyclerAdapter.setRecipes(recipes);
+                }
             }
         });
     }
 
+    private void initRecyclerView() {
+        mRecipeRecyclerAdapter = new RecipeRecyclerAdapter(this);
+        mRecyclerView.setAdapter(mRecipeRecyclerAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void searchRecipesApi(String query, int pageNumber) {
+        mRecipeListViewModel.searchRecipesApi(query, pageNumber);
+    }
+
     private void testRetrofitRequest() {
-        RecipeApi recipeApi = ServiceGenerator.getRecipeApi();
+       searchRecipesApi("chicken", 1);
+    }
 
-//        Call<RecipeSearchResponse> responseCall = recipeApi
-//                .searchRecipe("chicken breast",
-//                        "1");
-//
-//        responseCall.enqueue(new Callback<RecipeSearchResponse>() {
-//
-//            @Override
-//            public void onResponse(Call<RecipeSearchResponse> call, Response<RecipeSearchResponse> response) {
-//                Log.d(TAG, "onResponse: server response: " + response.toString());
-//                if (response.code() == 200) {
-//                    Log.d(TAG, "onResponse: " + response.body().toString());
-//                    List<Recipe> recipes = new ArrayList<>(response.body().getRecipes());
-//                    for (Recipe recipe: recipes) {
-//                        Log.d(TAG, "onResponse: " + recipe.getTitle());
-//                    }
-//                } else {
-//                        Log.d(TAG, "onResponse: " + response.errorBody().toString());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<RecipeSearchResponse> call, Throwable t) {
-//
-//            }
-//        } );
+    @Override
+    public void onRecipeClick(int position) {
 
+    }
 
-        Call<RecipeResponse> responseCall = recipeApi
-                .getRecipe("49421");
+    @Override
+    public void onCategoryClick(String category) {
 
-        responseCall.enqueue(new Callback<RecipeResponse>() {
-            @Override
-            public void onResponse(Call<RecipeResponse> call, Response<RecipeResponse> response) {
-                Log.d(TAG, "onResponse: server response: " + response.toString());
-                if (response.code() == 200) {
-                    Log.d(TAG, "onResponse: " + response.body().toString());
-                    Recipe recipe = response.body().getRecipe();
-                    Log.d(TAG, "onResponse: RETRIEVED RECIPE" + recipe);
-                } else {
-                    Log.d(TAG, "onResponse: " + response.errorBody().toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RecipeResponse> call, Throwable t) {
-
-            }
-        } );
     }
 }

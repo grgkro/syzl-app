@@ -44,10 +44,14 @@ public class RecipeApiClient {
     }
 
     public void searchRecipesApi(String query, int pageNumber) {
+        // we want a new, fresh instance of mRetrieveRecipesRunnable
         if (mRetrieveRecipesRunnable != null) {
             mRetrieveRecipesRunnable = null;
         }
         mRetrieveRecipesRunnable = new RetrieveRecipesRunnable(query, pageNumber);
+        // before we used mRetrieveRecipesRunnable here, we used a new Runnable inside the submit() part.
+        // why Future? Future nimmt den Wert einer asynchronen Task an. Man kann in der zwischenzeit andere aufgaben ausführen und dann mit handler.get() den Wert abfragen (falls er bis dahin da ist.)
+        // the AppExecutors is needed to execute 3 Runnables after each other with a defined time inbetween.
         final Future handler = AppExecutors.getInstance().networkIO().submit(mRetrieveRecipesRunnable);
 
         //this task / thread is running 3 seconds after the first task
