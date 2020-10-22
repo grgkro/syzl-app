@@ -10,28 +10,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import de.stuttgart.syzl3000.R;
 
 public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
     TextView title, publisher, socialScore;
     AppCompatImageView image;
     OnRecipeListener onRecipeListener;
 
+    public RecipeViewHolder(View itemView, OnRecipeListener onRecipeListener){
+        super(itemView);
 
-   public RecipeViewHolder (@NonNull View itemView, OnRecipeListener onRecipeListener) {
-       super(itemView);
+        this.onRecipeListener = onRecipeListener;
 
-       this.onRecipeListener = onRecipeListener;
+        title = itemView.findViewById(R.id.recipe_title);
+        publisher = itemView.findViewById(R.id.recipe_publisher);
+        socialScore = itemView.findViewById(R.id.recipe_social_score);
+        image = itemView.findViewById(R.id.recipe_image);
 
-       title = itemView.findViewById(R.id.recipe_title);
-       publisher = itemView.findViewById(R.id.recipe_publisher);
-       socialScore = itemView.findViewById(R.id.recipe_social_score);
-       image = itemView.findViewById(R.id.recipe_image);
-
-       itemView.setOnClickListener(this);
-   }
+        itemView.setOnClickListener(this);
+    }
 
     @Override
     public void onClick(View v) {
-       onRecipeListener.onRecipeClick(getAdapterPosition());
-
+        onRecipeListener.onRecipeClick(getAdapterPosition());
     }
 }

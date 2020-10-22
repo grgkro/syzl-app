@@ -1,5 +1,7 @@
 package de.stuttgart.syzl3000.viewmodels;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -12,13 +14,14 @@ import de.stuttgart.syzl3000.repositories.RecipeRepository;
 // there is no LiveData kept in the ViewModel itself, it returns the LiveData straight from the Repository
 public class RecipeListViewModel extends ViewModel {
 
+    private static final String TAG = "RecipeListViewModel";
+
     private RecipeRepository mRecipeRepository;
-    // should I display the categories?
     private boolean mIsViewingRecipes;
     private boolean mIsPerformingQuery;
 
     public RecipeListViewModel() {
-       mRecipeRepository = RecipeRepository.getInstance();
+        mRecipeRepository = RecipeRepository.getInstance();
         mIsPerformingQuery = false;
     }
 
@@ -26,8 +29,8 @@ public class RecipeListViewModel extends ViewModel {
         return mRecipeRepository.getRecipes();
     }
 
-    public void searchRecipesApi(String query, int pageNumber) {
-        mIsViewingRecipes = true;        // this is not yet true, the query was just started, but we already set it to true.
+    public void searchRecipesApi(String query, int pageNumber){
+        mIsViewingRecipes = true;
         mIsPerformingQuery = true;
         mRecipeRepository.searchRecipesApi(query, pageNumber);
     }
@@ -36,31 +39,50 @@ public class RecipeListViewModel extends ViewModel {
         return mIsViewingRecipes;
     }
 
-    public void setIsPerformingQuery(Boolean isPerformingQuery) {
-        mIsPerformingQuery = mIsPerformingQuery;
-    }
-
-    public boolean isPerformingQuery() {
-        return mIsPerformingQuery;
-    }
-
-    public void setIsViewingRecipes(boolean isViewingRecipes) {
+    public void setIsViewingRecipes(boolean isViewingRecipes){
         mIsViewingRecipes = isViewingRecipes;
     }
 
-    public boolean onBackPressed() {
-        if (isPerformingQuery()) {
-            //cancel the query and go back to categories
+    public void setIsPerformingQuery(boolean isPerformingQuery){
+        mIsPerformingQuery = isPerformingQuery;
+    }
+
+    public boolean onBackPressed(){
+        if(mIsPerformingQuery){
+            Log.d(TAG, "onBackPressed: canceling the request");
             mRecipeRepository.cancelRequest();
-            mIsPerformingQuery = false;
         }
-        if (mIsViewingRecipes) {
+        if(mIsViewingRecipes){
             mIsViewingRecipes = false;
             return false;
         }
-            return true;
-
+        return true;
     }
 
-
+    public void searchNextPage(){
+        Log.d(TAG, "searchNextPage: called.");
+        if(!mIsPerformingQuery
+                && mIsViewingRecipes){
+            mRecipeRepository.searchNextPage();
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
