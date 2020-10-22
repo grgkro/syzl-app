@@ -1,9 +1,13 @@
 package de.stuttgart.syzl3000;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,6 +20,7 @@ import de.stuttgart.syzl3000.adapters.OnRecipeListener;
 import de.stuttgart.syzl3000.adapters.RecipeRecyclerAdapter;
 import de.stuttgart.syzl3000.models.Recipe;
 import de.stuttgart.syzl3000.util.Testing;
+import de.stuttgart.syzl3000.util.VerticalSpacingItemDecorator;
 import de.stuttgart.syzl3000.viewmodels.RecipeListViewModel;
 
 public class RecipeListActivity extends BaseActivity implements OnRecipeListener {
@@ -25,18 +30,26 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
     private RecipeListViewModel mRecipeListViewModel;
     private RecyclerView mRecyclerView;
     private RecipeRecyclerAdapter mRecipeRecyclerAdapter;
+    private SearchView mSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
         mRecyclerView = findViewById(R.id.recipe_list);
+        mSearchView = findViewById(R.id.search_view);
 
         mRecipeListViewModel = new ViewModelProvider(this).get(RecipeListViewModel.class);
 
         initRecyclerView();
         subscribeObservers();
         initSearchView();
+
+        if(!mRecipeListViewModel.isViewingRecipes()) {
+            // display the search categories
+            displaySearchCategories();
+        }
+        setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
     }
 
     private void subscribeObservers() {
@@ -46,8 +59,11 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
                 if (recipes != null) {
-                    Testing.printRecipes(recipes, "recipes test");
-                    mRecipeRecyclerAdapter.setRecipes(recipes);
+                    if (mRecipeListViewModel.isViewingRecipes()) {
+                        Testing.printRecipes(recipes, "recipes test");
+                        mRecipeListViewModel.setIsPerformingQuery(false);  // the query is complete now
+                        mRecipeRecyclerAdapter.setRecipes(recipes);
+                    }
                 }
             }
         });
@@ -55,8 +71,11 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
 
     private void initRecyclerView() {
         mRecipeRecyclerAdapter = new RecipeRecyclerAdapter(this);
+        VerticalSpacingItemDecorator itemDecorator = new VerticalSpacingItemDecorator(30);   // this will add the little spacing between the cards in the category list overview View (30px)
+        mRecyclerView.addItemDecoration(itemDecorator);
         mRecyclerView.setAdapter(mRecipeRecyclerAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
     }
 
     private void searchRecipesApi(String query, int pageNumber) {
@@ -64,13 +83,13 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
     }
 
     private void initSearchView() {
-        final SearchView searchView = findViewById(R.id.search_view);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
 
                 mRecipeRecyclerAdapter.displayLoading();
-                searchRecipesApi(query, 1);
+                mRecipeListViewModel.searchRecipesApi(query, 1);
+                mSearchView.clearFocus();      // this takes the Focus from the search field when the query was submitted -> otherwise the back press button would first remove the focus from the searchView and then only on the second prss go back.
                 return false;
             }
 
@@ -88,6 +107,40 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
 
     @Override
     public void onCategoryClick(String category) {
+        mRecipeRecyclerAdapter.displayLoading();
+        mRecipeListViewModel.searchRecipesApi(category, 1);
+        mSearchView.clearFocus();
+    }
 
+    private void displaySearchCategories() {
+        mRecipeListViewModel.setIsViewingRecipes(false);
+        mRecipeRecyclerAdapter.displaySearchCategories();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mRecipeListViewModel.onBackPressed()) {
+            super.onBackPressed();
+        } else {
+            displaySearchCategories();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_categories:
+                displaySearchCategories();
+                return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.recipe_search_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 }

@@ -13,9 +13,13 @@ import de.stuttgart.syzl3000.repositories.RecipeRepository;
 public class RecipeListViewModel extends ViewModel {
 
     private RecipeRepository mRecipeRepository;
+    // should I display the categories?
+    private boolean mIsViewingRecipes;
+    private boolean mIsPerformingQuery;
 
     public RecipeListViewModel() {
-        mRecipeRepository = RecipeRepository.getInstance();
+       mRecipeRepository = RecipeRepository.getInstance();
+        mIsPerformingQuery = false;
     }
 
     public LiveData<List<Recipe>> getRecipes() {
@@ -23,7 +27,40 @@ public class RecipeListViewModel extends ViewModel {
     }
 
     public void searchRecipesApi(String query, int pageNumber) {
+        mIsViewingRecipes = true;        // this is not yet true, the query was just started, but we already set it to true.
+        mIsPerformingQuery = true;
         mRecipeRepository.searchRecipesApi(query, pageNumber);
     }
+
+    public boolean isViewingRecipes() {
+        return mIsViewingRecipes;
+    }
+
+    public void setIsPerformingQuery(Boolean isPerformingQuery) {
+        mIsPerformingQuery = mIsPerformingQuery;
+    }
+
+    public boolean isPerformingQuery() {
+        return mIsPerformingQuery;
+    }
+
+    public void setIsViewingRecipes(boolean isViewingRecipes) {
+        mIsViewingRecipes = isViewingRecipes;
+    }
+
+    public boolean onBackPressed() {
+        if (isPerformingQuery()) {
+            //cancel the query and go back to categories
+            mRecipeRepository.cancelRequest();
+            mIsPerformingQuery = false;
+        }
+        if (mIsViewingRecipes) {
+            mIsViewingRecipes = false;
+            return false;
+        }
+            return true;
+
+    }
+
 
 }
