@@ -21,6 +21,8 @@ import retrofit2.Response;
 
 import static de.stuttgart.syzl3000.util.Constants.NETWORK_TIMEOUT;
 
+// The Client is where we make the queries! (end of diagram: Activity -> ViewModel -> Repo -> Client)
+// the requests are made on background threads using Executors -> 1. Executors let you define a pool of threads (we have 3 threads in our pool, inside the AppEcecutors.class), and android is automatically load balancing these requests. 2. We can schedule the requests, which means we can timeout them.
 public class RecipeApiClient {
 
     private static final String TAG = "RecipeApiClient";
@@ -30,6 +32,7 @@ public class RecipeApiClient {
     private RetrieveRecipeRunnable mRetrieveRecipeRunnable;
     private RetrieveRecipesRunnable mRetrieveRecipesRunnable;
     private MutableLiveData<Recipe> mRecipe;
+    private MutableLiveData<Boolean> mRecipeRequestTimeout = new MutableLiveData<>();
 
     public static RecipeApiClient getInstance() {
          if (instance == null ) {
@@ -43,12 +46,17 @@ public class RecipeApiClient {
         mRecipe = new MutableLiveData<>();
     }
 
+    //when using LiveData, we always need a getter method for that LiveData. The same method then will be eneded in Repository & ViewModel
     public LiveData<List<Recipe>> getRecipes() {
         return mRecipes;
     }
 
     public LiveData<Recipe> getRecipe() {
         return mRecipe;
+    }
+
+    public LiveData<Boolean> isRecipeRequestTimedOut() {
+        return mRecipeRequestTimeout;
     }
 
     public void searchRecipesApi(String query, int pageNumber) {
@@ -61,7 +69,8 @@ public class RecipeApiClient {
         // why Future? Future nimmt den Wert einer asynchronen Task an. Man kann in der zwischenzeit andere aufgaben ausführen und dann mit handler.get() den Wert abfragen (falls er bis dahin da ist.)
         // the AppExecutors is needed to execute 3 Runnables after each other with a defined time inbetween.
         final Future handler = AppExecutors.getInstance().networkIO().submit(mRetrieveRecipesRunnable);
-
+        // we have to set the mRecipeRequestTimeout to false, so that its always false at the beginning of a request. Without this line, if one recipe request failed, the next one will not show a progress bar anymore but fail immediately (instead of after 3 sec). So even if the network works, you would always see the errorView shortly until the data is loaded.
+        mRecipeRequestTimeout.setValue(false);
         //this task / thread is running 3 seconds after the first task
         AppExecutors.getInstance().networkIO().schedule(new Runnable() {
             @Override
@@ -87,7 +96,7 @@ public class RecipeApiClient {
             @Override
             public void run() {
                 // let the user know it's timed out
-
+                mRecipeRequestTimeout.postValue(true);
                 handler.cancel(true);
             }
         }, NETWORK_TIMEOUT, TimeUnit.MILLISECONDS);  // the Runnable gets stopped, if its still running after 3 sec

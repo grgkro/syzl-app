@@ -32,7 +32,7 @@ public class CircleRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public CircleRecyclerAdapter(OnCircleListener OnCircleListener) {
         mOnCircleListener = OnCircleListener;
         mCircles = new ArrayList<>();
-        Circle testCircle1 = new Circle("Girlfriend", new ArrayList<>(Arrays.asList("Jessica")), null);
+        Circle testCircle1 = new Circle("Jessica", new ArrayList<>(Arrays.asList("Jessica")), null);
         Circle testCircle2 = new Circle("Johannes + Klaus", new ArrayList<>(Arrays.asList("Johannes", "Klaus")), "https://www.wonderplugin.com/wp-content/uploads/2013/12/Evening_1024.jpg");
         mCircles.add(testCircle1);
         mCircles.add(testCircle2);

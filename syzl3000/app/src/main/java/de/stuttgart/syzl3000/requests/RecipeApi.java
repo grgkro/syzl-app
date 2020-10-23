@@ -6,6 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
+// we use retrofit to make http requests -> retrofit always requires such a API interface, where we specify the queries.
 public interface RecipeApi {
 
     // SEARCH
