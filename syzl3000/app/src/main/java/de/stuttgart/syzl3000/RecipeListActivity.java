@@ -32,6 +32,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
     private RecyclerView mRecyclerView;
     private RecipeRecyclerAdapter mRecipeRecyclerAdapter;
     private SearchView mSearchView;
+    private CircleListActivity mCircleListActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         initRecyclerView();
         subscribeObservers();
         initSearchView();
+
 
         if(!mRecipeListViewModel.isViewingRecipes()) {
             // display the search categories
@@ -124,7 +126,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         mSearchView.clearFocus();
     }
 
-    private void displaySearchCategories() {
+    void displaySearchCategories() {
         mRecipeListViewModel.setIsViewingRecipes(false);
         mRecipeRecyclerAdapter.displaySearchCategories();
     }
@@ -143,6 +145,11 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         switch (item.getItemId()) {
             case R.id.action_categories:
                 displaySearchCategories();
+                return super.onOptionsItemSelected(item);
+            case R.id.action_circles:
+                Intent intent = new Intent(this, CircleListActivity.class);
+                startActivity(intent);
+
                 return super.onOptionsItemSelected(item);
             default:
                 return super.onOptionsItemSelected(item);
