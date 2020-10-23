@@ -8,6 +8,7 @@ public class AppExecutors {
     private static AppExecutors instance;
 
     public static AppExecutors getInstance() {
+        // Singelton
         if (instance == null) {
             instance = new AppExecutors();
         }

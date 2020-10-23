@@ -12,6 +12,8 @@ import de.stuttgart.syzl3000.repositories.RecipeRepository;
 
 // getting, holding and displaying the recipes list
 // there is no LiveData kept in the ViewModel itself, it returns the LiveData straight from the Repository
+//ViewModels help retain state even when Activity is destroyed or something happens which causes data to be lost. For example the variable "isViewingRecipes" is a state of the RecipeListActivity but is saved in the RecipeListViewModel.
+// Each Activity should have an extra ViewModel, not share it with another (if it needs one at all). Repository and Client can be shared like between RecipeList- and RecipeActivity
 public class RecipeListViewModel extends ViewModel {
 
     private static final String TAG = "RecipeListViewModel";
