@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--We need a CoordinatorLayout, instead of an ConstraintLayout, because we use custom scrolling behavior (Toolbar hides when scrolling down) -->
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CircleListActivity">
+
+    <!--  CoordinatorLayout always needs a AppBarLayout as direct child-->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout_circles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_circles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:contentInsetStart="0dp"
+            app:layout_scrollFlags="scroll|enterAlways"> <!-- this line determines the custom scrolling behaviour -->
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/search_view_circles"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:queryHint="Johannes + Klaus ...">
+
+            </androidx.appcompat.widget.SearchView>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/circle_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">  <!-- this line tells the RecyclerView to start underneath the custom toolbar -->
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
