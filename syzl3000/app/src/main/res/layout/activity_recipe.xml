@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- the progress spinner / bar is not in here, but in base_activity. It gets shown, bc this activity gets hidden until the data is loaded. -->
 
-
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/parent"
-    android:visibility="gone">   <!-- this hides the view, until the request is complete and the data is loaded. -->
+    android:visibility="visible">   <!-- this hides the view, until the request is complete and the data is loaded. -->
 
     <RelativeLayout
         android:id="@+id/recipe_layout"
@@ -77,11 +77,11 @@
             android:padding="10dp"></LinearLayout>
         <!-- the incredients actually are not in here, they get programmatically added -->
 
-        <Button
-            android:id="@+id/button_showRecipeOnGoogleTab"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="show full recipe" />
+<!--        <Button-->
+<!--            android:id="@+id/button_showRecipeOnGoogleTab"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="show full recipe" />-->
 
     </RelativeLayout>
 

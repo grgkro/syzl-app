@@ -5,36 +5,39 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import de.stuttgart.syzl3000.adapters.ArrayAdapter;
+import de.stuttgart.syzl3000.models.Recipe;
 
 public class SwipeActivity extends Activity {
 
-    private ArrayList<String> al;
-    private ArrayAdapter<String> arrayAdapter;
+    private ArrayList<Recipe> al2;
+    private de.stuttgart.syzl3000.adapters.ArrayAdapter arrayAdapter;
     private int i;
+
+    ListView listView;
+    List<Recipe> rowItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_swipe);
 
+        rowItems = new ArrayList<>();
+        rowItems.add(new Recipe("String title2", "String publisher_url", "String recipe_id", "String source_url", "String publisher", "String _id", 100, "String image_url", new String[]{"ingredients"}));
+        rowItems.add(new Recipe("String title3", "String publisher_url", "String recipe_id", "String source_url", "String publisher", "String _id", 100, "String image_url", new String[]{"ingredients"}));
+        rowItems.add(new Recipe("String title23", "String publisher_url", "String recipe_id", "String source_url", "String publisher", "String _id", 100, "String image_url", new String[]{"ingredients"}));
+        rowItems.add(new Recipe("String title23232", "String publisher_url", "String recipe_id", "String source_url", "String publisher", "String _id", 100, "String image_url", new String[]{"ingredients"}));
+        rowItems.add(new Recipe("String title23232", "String publisher_url", "String recipe_id", "String source_url", "String publisher", "String _id", 100, "String image_url", new String[]{"ingredients"}));
 
-        al = new ArrayList<>();
-        al.add("php");
-        al.add("c");
-        al.add("python");
-        al.add("java");
-        al.add("html");
-        al.add("c++");
-        al.add("css");
-        al.add("javascript");
-
-        arrayAdapter = new ArrayAdapter<>(this, R.layout.item, R.id.helloText, al );
+        arrayAdapter = new ArrayAdapter(this, R.layout.activity_recipe, rowItems);
 
         SwipeFlingAdapterView flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
 
@@ -44,7 +47,7 @@ public class SwipeActivity extends Activity {
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
                 Log.d("LIST", "removed object!");
-                al.remove(0);
+                rowItems.remove(0);
                 arrayAdapter.notifyDataSetChanged();
             }
 
@@ -64,10 +67,10 @@ public class SwipeActivity extends Activity {
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
                 // Ask for more data here
-                al.add("XML ".concat(String.valueOf(i)));
-                arrayAdapter.notifyDataSetChanged();
-                Log.d("LIST", "notified");
-                i++;
+//                al.add("XML ".concat(String.valueOf(i)));
+//                arrayAdapter.notifyDataSetChanged();
+//                Log.d("LIST", "notified");
+//                i++;
             }
 
             @Override
