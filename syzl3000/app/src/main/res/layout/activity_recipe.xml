@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- the progress spinner / bar is not in here, but in base_activity. It gets shown, bc this activity gets hidden until the data is loaded. -->
+
+
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"

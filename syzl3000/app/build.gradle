@@ -74,5 +74,7 @@ dependencies {
     // Google Tabs
     implementation "androidx.browser:browser:1.2.0"
 
+    // SwipeCards
+    implementation 'com.lorentzos.swipecards:library:1.0.9'
 
 }
