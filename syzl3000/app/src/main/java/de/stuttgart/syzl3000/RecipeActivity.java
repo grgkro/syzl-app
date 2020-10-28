@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -38,7 +39,7 @@ public class RecipeActivity extends BaseActivity {
     private LinearLayout mRecipeIngredientsContainer;   // into this we will put the ingredients programmatically
     private ScrollView mScrollView;    // this one I need, to set it to visible when the recipe is retrieved / loaded.
 private Recipe mRecipe;
-private RelativeLayout mLayout;
+private FrameLayout mLayout;
 
     private RecipeViewModel mRecipeViewModel;
 
@@ -50,7 +51,7 @@ private RelativeLayout mLayout;
         mLayout = findViewById(R.id.recipe_layout);
         mLayout.setOnClickListener(layoutClickListener);
 
-        mRecipeImage = findViewById(R.id.recipe_image);
+        mRecipeImage = findViewById(R.id.single_recipe_image);
         mRecipeTitle = findViewById(R.id.recipe_title);
         mRecipeRank = findViewById(R.id.recipe_social_score);
         mRecipeIngredientsContainer = findViewById(R.id.ingredients_container);

@@ -20,8 +20,7 @@ public class SwipeActivity extends Activity {
 
     private static final String TAG = "SwipeActivity";
 
-    private ArrayList<Recipe> al2;
-    private de.stuttgart.syzl3000.adapters.ArrayAdapter arrayAdapter;
+    private ArrayAdapter arrayAdapter;
     private int i;
 
     ListView listView;
@@ -39,9 +38,9 @@ public class SwipeActivity extends Activity {
         rowItems.add(new Recipe("String title23232", "String publisher_url", "String recipe_id", "String source_url", "String publisher", "String _id", 100, "String image_url", new String[]{"ingredients"}));
         rowItems.add(new Recipe("String title23232", "String publisher_url", "String recipe_id", "String source_url", "String publisher", "String _id", 100, "https://res.cloudinary.com/dk4ocuiwa/image/upload/v1575163942/RecipesApi/353269d44b.jpg", new String[]{"ingredients"}));
 
-        arrayAdapter = new ArrayAdapter(this, R.layout.activity_recipe, rowItems);
+        arrayAdapter = new ArrayAdapter(getApplicationContext(), R.layout.activity_recipe, rowItems);
 
-        SwipeFlingAdapterView flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
+        SwipeFlingAdapterView flingContainer = (SwipeFlingAdapterView) findViewById(R.id.swipe_frame);
 
         flingContainer.setAdapter(arrayAdapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {

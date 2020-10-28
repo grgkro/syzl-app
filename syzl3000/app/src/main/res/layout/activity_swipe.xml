@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.lorentzos.flingswipe.SwipeFlingAdapterView
-        android:id="@+id/frame"
+        android:id="@+id/swipe_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ffeee9e2"
