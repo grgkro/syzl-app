@@ -34,41 +34,28 @@ public class ArrayAdapter extends android.widget.ArrayAdapter<Recipe> {
         super(context, resourceId, recipes);
     }
 
-//    To customize the appearance of each item you can override the toString() method for the objects in your array. Or, to create a view for each item that's something other than a TextView (for example, if you want an ImageView for each array item), extend the ArrayAdapter class and override getView() to return the type of view you want for each item.
-   public View getView(int position, View convertView, ViewGroup parent) {
+    //    To customize the appearance of each item you can override the toString() method for the objects in your array. Or, to create a view for each item that's something other than a TextView (for example, if you want an ImageView for each array item), extend the ArrayAdapter class and override getView() to return the type of view you want for each item.
+    public View getView(int position, View convertView, ViewGroup parent) {
         Recipe recipe = getItem(position);
-       if (convertView == null) {
+        if (convertView == null) {
 //           Instantiates a layout XML file into its corresponding View objects.
-           convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_recipe, parent, false);
-       }
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_recipe, parent, false);
+        }
 
 
+        ImageView image = convertView.findViewById(R.id.single_recipe_image);
 
-       ImageView image = convertView.findViewById(R.id.single_recipe_image);
-       
 //       holder.i = (ImageView) convertView.findViewById(R.id.icon);
-       TextView title = convertView.findViewById(R.id.recipe_title);
-       TextView social_score = convertView.findViewById(R.id.recipe_social_score);
-       TextView ingredients_title = convertView.findViewById(R.id.ingredients_title);
+        TextView title = convertView.findViewById(R.id.recipe_title);
+        TextView social_score = convertView.findViewById(R.id.recipe_social_score);
+        TextView ingredients_title = convertView.findViewById(R.id.ingredients_title);
 
-//       image.setImageURI(Uri.parse(recipe.getImage_url()));
-//       image.setImageResource(Uri.parse("https://www.imagesource.com/wp-content/uploads/2019/06/Rio.jpg"));
-       image.setImageResource(R.mipmap.ic_launcher);
-//       RequestOptions options = new RequestOptions()
-//               .centerCrop()
-//               .error(R.drawable.ic_launcher_background);
-//
-//       Glide.with(((CircleViewHolder) holder).itemView)
-//               .setDefaultRequestOptions(options)
-//               .load("https://www.imagesource.com/wp-content/uploads/2019/06/Rio.jpg")
-//               .into(((CircleViewHolder) holder).circleImage);
-       Glide.with(getContext()).load("https://www.imagesource.com/wp-content/uploads/2019/06/Rio.jpg").into(image);
-       title.setText(recipe.getTitle());
-       ingredients_title.setText("Ingedients lkdfs");
-               social_score.setText("200");
-//       title.setText(recipe.getTitle());
+        Glide.with(getContext()).load(recipe.getImage_url()).into(image);
+        title.setText(recipe.getTitle());
+        ingredients_title.setText("Ingredients");
+        social_score.setText(String.valueOf(Math.round(recipe.getSocial_rank())));
 
-       return convertView;
-   }
+        return convertView;
+    }
 
 }

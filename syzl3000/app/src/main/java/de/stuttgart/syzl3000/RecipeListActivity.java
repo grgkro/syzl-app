@@ -126,7 +126,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
     }
     @Override
     public void onRecipeClick(int position) {
-        Intent intent = new Intent(this, RecipeActivity.class);
+        Intent intent = new Intent(this, SwipeActivity.class);
         intent.putExtra("recipe", mRecipeRecyclerAdapter.getSelectedRecipe(position));
         startActivity(intent);
     }
