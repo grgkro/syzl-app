@@ -38,8 +38,8 @@ public class RecipeActivity extends BaseActivity {
     private TextView mRecipeTitle, mRecipeRank;
     private LinearLayout mRecipeIngredientsContainer;   // into this we will put the ingredients programmatically
     private ScrollView mScrollView;    // this one I need, to set it to visible when the recipe is retrieved / loaded.
-private Recipe mRecipe;
-private FrameLayout mLayout;
+    private Recipe mRecipe;
+    private FrameLayout mLayout;
 
     private RecipeViewModel mRecipeViewModel;
 

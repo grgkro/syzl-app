@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- the progress spinner / bar is not in here, but in base_activity. It gets shown, bc this activity gets hidden until the data is loaded. -->
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:id="@+id/recipe_layout"
-    >
+
 
 <!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
 <!--    android:layout_width="match_parent"-->
@@ -15,22 +10,23 @@
 <!--    android:id="@+id/parent_scrollView"-->
 <!--    android:visibility="visible">   &lt;!&ndash; this hides the view, until the request is complete and the data is loaded. &ndash;&gt;-->
 
-<!--    <RelativeLayout-->
-<!--        android:id="@+id/recipe_layout"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="vertical"-->
-<!--        android:clickable="true"-->
-<!--        android:focusable="true"-->
-<!--        android:focusableInTouchMode="true">-->
+<LinearLayout android:id="@+id/recipe_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
         <!-- imageView for the main image -->
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/single_recipe_image"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/recipe_image_height"
+            android:layout_height="300dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_background"/>
+
         <!-- Title -->
         <TextView
             android:id="@+id/recipe_title"
@@ -38,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/recipe_image"
             android:padding="7dp"
+            android:gravity="center|left"
             android:text="Some Recipe title"
             android:textColor="#000"
             android:textSize="@dimen/recipe_title_text_size" />
@@ -72,11 +69,6 @@
                 android:textColor="@color/red"
                 android:textSize="@dimen/recipe_publisher_text_size" />
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:id="@+id/butn" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -94,10 +86,9 @@
 <!--            android:layout_height="wrap_content"-->
 <!--            android:text="show full recipe" />-->
 
-<!--    </RelativeLayout>-->
+    </LinearLayout>
 
 
 
 <!--</ScrollView>-->
 
-</FrameLayout>
