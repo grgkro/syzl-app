@@ -39,7 +39,7 @@ public class RecipeActivity extends BaseActivity {
     private LinearLayout mRecipeIngredientsContainer;   // into this we will put the ingredients programmatically
     private ScrollView mScrollView;    // this one I need, to set it to visible when the recipe is retrieved / loaded.
     private Recipe mRecipe;
-    private FrameLayout mLayout;
+    private LinearLayout mLayout;
 
     private RecipeViewModel mRecipeViewModel;
 
@@ -171,6 +171,7 @@ public class RecipeActivity extends BaseActivity {
     }
 
     private void showParent() {
-        mScrollView.setVisibility(View.VISIBLE);
+        Log.d(TAG, "showParent: ----------------");
+        mLayout.setVisibility(View.VISIBLE);
     }
 }

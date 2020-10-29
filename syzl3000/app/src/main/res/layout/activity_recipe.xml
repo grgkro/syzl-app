@@ -10,13 +10,15 @@
 <!--    android:id="@+id/parent_scrollView"-->
 <!--    android:visibility="visible">   &lt;!&ndash; this hides the view, until the request is complete and the data is loaded. &ndash;&gt;-->
 
-<LinearLayout android:id="@+id/recipe_layout"
+<LinearLayout
+    android:id="@+id/recipe_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
+    android:visibility="visible"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
         <!-- imageView for the main image -->

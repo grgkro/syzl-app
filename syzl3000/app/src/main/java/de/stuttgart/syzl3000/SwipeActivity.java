@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -26,17 +27,15 @@ public class SwipeActivity extends Activity {
     ListView listView;
     List<Recipe> rowItems;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_swipe);
 
+
         rowItems = new ArrayList<>();
-        rowItems.add(new Recipe("String title2", "String publisher_url", "String recipe_id", "String source_url", "String publisher", "String _id", 100, "String image_url", new String[]{"ingredients"}));
-        rowItems.add(new Recipe("String title3", "String publisher_url", "String recipe_id", "String source_url", "String publisher", "String _id", 100, "String image_url", new String[]{"ingredients"}));
-        rowItems.add(new Recipe("String title23", "String publisher_url", "String recipe_id", "String source_url", "String publisher", "String _id", 100, "String image_url", new String[]{"ingredients"}));
-        rowItems.add(new Recipe("String title23232", "String publisher_url", "String recipe_id", "String source_url", "String publisher", "String _id", 100, "String image_url", new String[]{"ingredients"}));
-        rowItems.add(new Recipe("String title23232", "String publisher_url", "String recipe_id", "String source_url", "String publisher", "String _id", 100, "https://res.cloudinary.com/dk4ocuiwa/image/upload/v1575163942/RecipesApi/353269d44b.jpg", new String[]{"ingredients"}));
+               rowItems.add(new Recipe("String title23232ghjghjghj", "String publisher_url", "String recipe_id", "String source_url", "String publisher", "String _id", 100, "https://res.cloudinary.com/dk4ocuiwa/image/upload/v1575163942/RecipesApi/353269d44b.jpg", new String[]{"ingredients"}));
 
         arrayAdapter = new ArrayAdapter(getApplicationContext(), R.layout.activity_recipe, rowItems);
 
@@ -49,6 +48,8 @@ public class SwipeActivity extends Activity {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
                 Log.d("LIST", "removed object!");
                 rowItems.remove(0);
+                rowItems.add(new Recipe("String title2", "String publisher_url", "String recipe_id", "String source_url", "String publisher", "String _id", 100, "String image_url", new String[]{"ingredients"}));
+
                 arrayAdapter.notifyDataSetChanged();
             }
 
@@ -92,10 +93,12 @@ public class SwipeActivity extends Activity {
             }
         });
 
+
     }
 
     static void makeToast(Context ctx, String s){
         Toast.makeText(ctx, s, Toast.LENGTH_SHORT).show();
     }
+
 
 }
