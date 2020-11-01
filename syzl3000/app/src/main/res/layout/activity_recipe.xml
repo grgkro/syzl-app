@@ -10,6 +10,8 @@
 <!--    android:id="@+id/parent_scrollView"-->
 <!--    android:visibility="visible">   &lt;!&ndash; this hides the view, until the request is complete and the data is loaded. &ndash;&gt;-->
 
+
+
 <LinearLayout
     android:id="@+id/recipe_layout"
     android:layout_width="match_parent"
@@ -19,7 +21,10 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:visibility="visible"
+    android:background="@color/cardview_light_background"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
+
 
         <!-- imageView for the main image -->
         <androidx.appcompat.widget.AppCompatImageView
