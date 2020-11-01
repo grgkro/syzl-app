@@ -6,17 +6,8 @@ public class Constants {
     public static final int NETWORK_TIMEOUT = 3000;
 
     public static final String[] DEFAULT_SEARCH_CATEGORIES =
-            {"Barbeque", "Breakfast", "Chicken", "Beef", "Brunch", "Dinner", "Wine", "Italian"};
+            {"Vegetarian", "Vegan", "Chicken", "Beef", "Pork", "Dinner", "Breakfast", "Brunch", "Wine", "Italian", "French", "Greek", "Thai", "Chinese" };
 
     public static final String[] DEFAULT_SEARCH_CATEGORY_IMAGES =
-            {
-                    "barbeque",
-                    "breakfast",
-                    "chicken",
-                    "beef",
-                    "brunch",
-                    "dinner",
-                    "wine",
-                    "italian"
-            };
+            {"vegetarian", "vegan", "chicken", "beef", "pork", "dinner", "breakfast", "brunch", "wine", "italian", "french", "greek", "thai", "chinese" };
 }

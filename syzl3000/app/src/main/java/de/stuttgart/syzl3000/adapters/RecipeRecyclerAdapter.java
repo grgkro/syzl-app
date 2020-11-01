@@ -93,7 +93,7 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     .centerCrop()
                     .error(R.drawable.ic_launcher_background);
 
-            Uri path = Uri.parse("android.resource://com.codingwithmitch.foodrecipes/drawable/" + mRecipes.get(i).getImage_url());
+            Uri path = Uri.parse("android.resource://de.stuttgart.syzl3000/drawable/" + mRecipes.get(i).getImage_url());
             Glide.with(((CategoryViewHolder)viewHolder).itemView)
                     .setDefaultRequestOptions(options)
                     .load(path)
