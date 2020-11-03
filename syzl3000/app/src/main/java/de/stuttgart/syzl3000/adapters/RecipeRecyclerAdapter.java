@@ -75,18 +75,19 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         int itemViewType = getItemViewType(i);
         if(itemViewType == RECIPE_TYPE) {
             // set the image
-            RequestOptions options = new RequestOptions()
-                    .centerCrop()
-                    .error(R.drawable.ic_launcher_background);
+//            RequestOptions options = new RequestOptions()
+//                    .centerCrop()
+//                    .error(R.drawable.ic_launcher_background);
+//
+//            Glide.with(((RecipeViewHolder) viewHolder).itemView)
+//                    .setDefaultRequestOptions(options)
+//                    .load(mRecipes.get(i).getImage_url())
+//                    .into(((RecipeViewHolder) viewHolder).image);
+//
+//            ((RecipeViewHolder) viewHolder).title.setText(mRecipes.get(i).getTitle());
+//            ((RecipeViewHolder) viewHolder).publisher.setText(mRecipes.get(i).getPublisher());
+//            ((RecipeViewHolder) viewHolder).socialScore.setText(String.valueOf(Math.round(mRecipes.get(i).getSocial_rank())));
 
-            Glide.with(((RecipeViewHolder) viewHolder).itemView)
-                    .setDefaultRequestOptions(options)
-                    .load(mRecipes.get(i).getImage_url())
-                    .into(((RecipeViewHolder) viewHolder).image);
-
-            ((RecipeViewHolder) viewHolder).title.setText(mRecipes.get(i).getTitle());
-            ((RecipeViewHolder) viewHolder).publisher.setText(mRecipes.get(i).getPublisher());
-            ((RecipeViewHolder) viewHolder).socialScore.setText(String.valueOf(Math.round(mRecipes.get(i).getSocial_rank())));
         }
         else if(itemViewType == CATEGORY_TYPE){
             RequestOptions options = new RequestOptions()

@@ -2,6 +2,7 @@ package de.stuttgart.syzl3000;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.stuttgart.syzl3000.adapters.ArrayAdapter;
+import de.stuttgart.syzl3000.adapters.RecipeRecyclerAdapter;
 import de.stuttgart.syzl3000.models.Recipe;
 import de.stuttgart.syzl3000.util.Testing;
 import de.stuttgart.syzl3000.viewmodels.RecipeListViewModel;
@@ -34,6 +37,7 @@ public class SwipeActivity extends BaseActivity  {
 
     private RecipeListViewModel mRecipeListViewModel;
     private RecipeViewModel mRecipeViewModel;
+    private RecipeRecyclerAdapter mRecipeRecyclerAdapter;
 //    private TextView mRecipeTitle, mRecipeRank;
 //    private LinearLayout mRecipeIngredientsContainer;   // into this we will put the ingredients programmatically
 
@@ -58,7 +62,7 @@ public class SwipeActivity extends BaseActivity  {
 
         subscribeObservers();
         subscribeObserversForSingleRecipe();
-        getIncomingIntent();
+//        getIncomingIntent();
 
         rowItems = new ArrayList<>();
         rowItems.add(new Recipe("String title23232ghjghjghj", "String publisher_url", "String recipe_id", "", "String publisher", "String _id", 100, "https://www.imagesource.com/wp-content/uploads/2019/06/Rio.jpg", new String[]{"ingredients"}));
@@ -120,6 +124,9 @@ public class SwipeActivity extends BaseActivity  {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
                 makeToast(SwipeActivity.this, "Clicked!");
+                Recipe recipe = (Recipe) dataObject;
+                String sourceURL = recipe.getSource_url();
+                openGoogleTab(sourceURL);
             }
         });
 
@@ -193,6 +200,26 @@ public class SwipeActivity extends BaseActivity  {
 
     static void makeToast(Context ctx, String s){
         Toast.makeText(ctx, s, Toast.LENGTH_SHORT).show();
+    }
+
+//    @Override
+//    public void onBackPressed() {
+//        if (mRecipeListViewModel.onBackPressed()) {
+//            super.onBackPressed();
+//        } else {
+//            displaySearchCategories();
+//        }
+//    }
+//
+//    void displaySearchCategories() {
+//        mRecipeListViewModel.setIsViewingRecipes(false);
+//        mRecipeRecyclerAdapter.displaySearchCategories();
+//    }
+
+    private void openGoogleTab(String url) {
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(this, Uri.parse(url));
     }
 
 

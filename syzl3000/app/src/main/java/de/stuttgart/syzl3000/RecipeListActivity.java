@@ -1,5 +1,6 @@
 package de.stuttgart.syzl3000;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,6 +35,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
     private RecipeRecyclerAdapter mRecipeRecyclerAdapter;
     private SearchView mSearchView;
     private CircleListActivity mCircleListActivity;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         setContentView(R.layout.activity_recipe_list);
         mRecyclerView = findViewById(R.id.recipe_list);
         mSearchView = findViewById(R.id.search_view);
+        context = this;
 
         mRecipeListViewModel = new ViewModelProvider(this).get(RecipeListViewModel.class);
 
@@ -65,8 +68,17 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
                 if (recipes != null) {
                     if (mRecipeListViewModel.isViewingRecipes()) {
                         Testing.printRecipes(recipes, "recipes test");
-                        mRecipeListViewModel.setIsPerformingQuery(false);  // the query is complete now
-                        mRecipeRecyclerAdapter.setRecipes(recipes);
+
+//                        mRecipeRecyclerAdapter.setRecipes(recipes);
+                        Intent intent = new Intent(context, SwipeActivity.class);
+                        if (mRecipeRecyclerAdapter.getSelectedRecipe(0) != null) {
+//                            intent.putExtra("recipe", mRecipeRecyclerAdapter.getSelectedRecipe(0));
+                        } else {
+                            Recipe newRecipe = new Recipe("Title", "URL", "id", "source", "publi", "idd", 100, "image", new String[]{"dfsdf"});
+                            intent.putExtra("recipe", newRecipe);
+                        }
+//                        mRecipeListViewModel.setIsPerformingQuery(false);  // the query is complete now
+                        startActivity(intent);
                     }
                 }
             }
@@ -127,8 +139,8 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
     @Override
     public void onRecipeClick(int position) {
         Intent intent = new Intent(this, SwipeActivity.class);
-        intent.putExtra("recipe", mRecipeRecyclerAdapter.getSelectedRecipe(position));
-        startActivity(intent);
+//        intent.putExtra("recipe", mRecipeRecyclerAdapter.getSelectedRecipe(position));
+//        startActivity(intent);
     }
 
     @Override
