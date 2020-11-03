@@ -2,6 +2,7 @@ package de.stuttgart.syzl3000;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,7 +41,6 @@ public class SwipeActivity extends BaseActivity  {
     private RecipeRecyclerAdapter mRecipeRecyclerAdapter;
 //    private TextView mRecipeTitle, mRecipeRank;
 //    private LinearLayout mRecipeIngredientsContainer;   // into this we will put the ingredients programmatically
-
     private boolean recepieListAlreadyReceived;
     private Recipe mRecipe;
     private List<Recipe> mRecipes;
@@ -133,6 +133,8 @@ public class SwipeActivity extends BaseActivity  {
 
     }
 
+
+
     private void subscribeObservers() {
         // the LiveData (a.k.a. the recipes) comes from the Repository, goes to the ViewModel and arrives / gets observered here in the Activity: (Client: DB / API ->) Repo -> ViewModel -> Activity
         mRecipeListViewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
@@ -202,19 +204,18 @@ public class SwipeActivity extends BaseActivity  {
         Toast.makeText(ctx, s, Toast.LENGTH_SHORT).show();
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        if (mRecipeListViewModel.onBackPressed()) {
-//            super.onBackPressed();
-//        } else {
+    @Override
+    public void onBackPressed() {
+
+finish();
 //            displaySearchCategories();
-//        }
-//    }
-//
-//    void displaySearchCategories() {
-//        mRecipeListViewModel.setIsViewingRecipes(false);
-//        mRecipeRecyclerAdapter.displaySearchCategories();
-//    }
+
+    }
+
+    void displaySearchCategories() {
+        mRecipeListViewModel.setIsViewingRecipes(false);
+        mRecipeRecyclerAdapter.displaySearchCategories();
+    }
 
     private void openGoogleTab(String url) {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();

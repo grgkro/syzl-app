@@ -3,6 +3,7 @@ package de.stuttgart.syzl3000;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,6 +37,9 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
     private SearchView mSearchView;
     private CircleListActivity mCircleListActivity;
     private Context context;
+    private Boolean mIsShowingSwipeActivity;
+    private Boolean mSwipeActivityFinished;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,15 +73,8 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
                     if (mRecipeListViewModel.isViewingRecipes()) {
                         Testing.printRecipes(recipes, "recipes test");
 
-//                        mRecipeRecyclerAdapter.setRecipes(recipes);
                         Intent intent = new Intent(context, SwipeActivity.class);
-                        if (mRecipeRecyclerAdapter.getSelectedRecipe(0) != null) {
-//                            intent.putExtra("recipe", mRecipeRecyclerAdapter.getSelectedRecipe(0));
-                        } else {
-                            Recipe newRecipe = new Recipe("Title", "URL", "id", "source", "publi", "idd", 100, "image", new String[]{"dfsdf"});
-                            intent.putExtra("recipe", newRecipe);
-                        }
-//                        mRecipeListViewModel.setIsPerformingQuery(false);  // the query is complete now
+                        mIsShowingSwipeActivity = true;
                         startActivity(intent);
                     }
                 }
@@ -87,7 +84,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         mRecipeListViewModel.isQueryExhausted().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
+                if (aBoolean && !mIsShowingSwipeActivity) {
                     Log.d(TAG, "onChanged: is exhausted");
                     mRecipeRecyclerAdapter.setQueryExhausted();
                 }
@@ -155,13 +152,12 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         mRecipeRecyclerAdapter.displaySearchCategories();
     }
 
+
     @Override
     public void onBackPressed() {
-        if (mRecipeListViewModel.onBackPressed()) {
-            super.onBackPressed();
-        } else {
+
             displaySearchCategories();
-        }
+
     }
 
     @Override
