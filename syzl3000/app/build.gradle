@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "de.stuttgart.syzl3000"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -23,6 +23,8 @@ android {
         }
     }
     compileOptions {
+        // Support for Java 8 features
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -35,6 +37,7 @@ dependencies {
     def recyclerView_version = "1.0.0"
     def glideVersion = "4.11.0"
     def supportVersion = "28.0.0"
+    def aws_version = "2.13.+"
 
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
@@ -76,5 +79,34 @@ dependencies {
 
     // SwipeCards
     implementation 'com.lorentzos.swipecards:library:1.0.9'
+
+    // Amplify core dependency (for AWS Cognito)
+    implementation 'com.amplifyframework:core:1.6.4'
+    implementation 'com.amplifyframework:aws-auth-cognito:1.6.4'
+
+    // AWS Dependencies
+
+    implementation "com.amazonaws:aws-android-sdk-core:$aws_version"
+    implementation "com.amazonaws:aws-android-sdk-auth-core:$aws_version"
+    implementation("com.amazonaws:aws-android-sdk-auth-userpools:$aws_version@aar") { transitive = true }
+    implementation("com.amazonaws:aws-android-sdk-auth-ui:$aws_version") { transitive = true }
+
+    // Support for Java 8 features
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.10'
+
+    implementation 'com.android.support:appcompat-v7:24.0.0'
+    implementation 'com.android.support:design:24.2.1'
+
+    // Mobile Client for initializing the SDK
+    implementation ('com.amazonaws:aws-android-sdk-mobile-client:2.6.+@aar') { transitive = true; }
+
+    // Cognito UserPools for SignIn
+    implementation 'com.android.support:support-v4:24.+'
+    implementation ('com.amazonaws:aws-android-sdk-auth-userpools:2.6.+@aar') { transitive = true; }
+
+    // Sign in UI Library
+    implementation 'com.android.support:appcompat-v7:24.+'
+    implementation ('com.amazonaws:aws-android-sdk-auth-ui:2.6.+@aar') { transitive = true; }
+
 
 }
