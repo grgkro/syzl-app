@@ -3,7 +3,6 @@ package de.stuttgart.syzl3000;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -197,7 +196,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
 
     public void startAuthenticationActivity() {
         Log.i(TAG, "Starting Authentication Activity");
-        Intent i = new Intent(RecipeListActivity.this, AuthenticationActivity.class);
+        Intent i = new Intent(RecipeListActivity.this, SignUpActivity.class);
         RecipeListActivity.this.startActivity(i);
     }
 }

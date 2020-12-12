@@ -17,24 +17,6 @@
         android:padding="50dp"
         >
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="startLoginActivity"
-            android:focusable="true"
-            android:text="Welcome! Do you wanna syzl through movies or recipes?
-            Click on one of the pictures to select a category:"
-            android:textColor="#fefefe"
-            android:textSize="20dp"
-            android:layout_margin="20dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.904" />
-
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/select_movies_image"
             android:layout_width="match_parent"

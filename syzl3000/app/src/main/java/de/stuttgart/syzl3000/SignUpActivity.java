@@ -1,15 +1,13 @@
 package de.stuttgart.syzl3000;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,9 +21,15 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.core.InitializationStatus;
 import com.amplifyframework.hub.HubChannel;
 
-public class AuthenticationActivity extends AppCompatActivity {
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
-    private final String TAG = AuthenticationActivity.class.getSimpleName();
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+
+public class SignUpActivity extends AppCompatActivity {
+
+    private final String TAG = SignUpActivity.class.getSimpleName();
 
     private EditText editTextEmail;
     private EditText editTextPassword;
@@ -33,6 +37,7 @@ public class AuthenticationActivity extends AppCompatActivity {
     private static String email;
     private static String password;
     private String rememberErrorCause;
+    private SharedPreferences sharedPref;
 
     public static String getEmail() {
         return email;
@@ -50,19 +55,65 @@ public class AuthenticationActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPassword);
         signUpBtn = findViewById(R.id.signUpBtn);
 
-        subscribeAmplifyHub();
-
-        signUpBtn.setOnClickListener(v -> signUpBtnClicked());
-
         if (!redirectFromLoginActivity()) {
             setUpAmplifyWithAuth();
         }
 
-//        signOut();
-        Amplify.Auth.fetchAuthSession(
-                result -> Log.i(TAG, result.toString()),
-                error -> Log.e(TAG, error.toString())
-        );
+        sharedPref = getSharedPreferences("de.stuttgart.syzl3000.rem", Context.MODE_PRIVATE);
+        email = sharedPref.getString("email", null);
+        password = sharedPref.getString("pw", null);
+
+        tryLogIn();
+
+        try {
+            SecretKey key = generateTrulyRandomAESKey();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        signUpBtn.setOnClickListener(v -> signUpBtnClicked());
+
+
+
+
+    }
+
+    private void tryLogIn() {
+            Amplify.Auth.signIn(
+                    email,
+                    password,
+                    result -> {
+                        if (result.isSignInComplete()) {
+                            Log.i(TAG, "Sign in succeeded");
+                            rememberDevice();
+                            startTheNextActivity(SelectTopCategoryActivity.class);
+                        } else {
+                            Log.i(TAG,  "Sign in not complete");
+                        }
+
+                    },
+                    error -> Log.e(TAG, error.toString())
+            );
+    }
+
+    private void rememberDevice() {
+        Amplify.Auth.rememberDevice(
+                () -> Log.i(TAG, "Remember device succeeded"),
+                error -> Log.e(TAG, "Remember device failed with error " + error.toString()));
+    }
+
+    public static SecretKey generateTrulyRandomAESKey() throws NoSuchAlgorithmException {
+        // Generate a 256-bit key
+        final int outputKeyLength = 256;
+
+        SecureRandom secureRandom = new SecureRandom();
+        // Do *not* seed secureRandom! Automatically seeded from system entropy.
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        keyGenerator.init(outputKeyLength, secureRandom);
+        SecretKey key = keyGenerator.generateKey();
+        return key;
+//        Note that the security of this approach relies on safeguarding the generated key, which is is predicated on the security of the internal storage. Leaving the target file unencrypted (but set to MODE_PRIVATE) would provide similar security.
+//        https://android-developers.googleblog.com/2013/02/using-cryptography-to-store-credentials.html
     }
 
     private boolean redirectFromLoginActivity() {
@@ -81,48 +132,18 @@ public class AuthenticationActivity extends AppCompatActivity {
         }
     }
 
-    private void subscribeAmplifyHub() {
-        Amplify.Hub.subscribe(HubChannel.AUTH,
-                hubEvent -> {
-                    if (hubEvent.getName().equals(InitializationStatus.SUCCEEDED.toString())) {
-                        Log.i("AuthQuickstart", "Auth successfully initialized");
-                    } else if (hubEvent.getName().equals(InitializationStatus.FAILED.toString())){
-                        Log.i("AuthQuickstart", "Auth failed to succeed");
-                    } else {
-                        switch (AuthChannelEventName.valueOf(hubEvent.getName())) {
-                            case SIGNED_IN:
-                                Log.i("AuthQuickstart", "Auth just became signed in.");
-                                amplifyFetchUserAttributes();
-                                Log.i(TAG, "Start TopCategory Activity");
-                                Intent i = new Intent(AuthenticationActivity.this, SelectTopCategoryActivity.class);
-                                AuthenticationActivity.this.startActivity(i);
-                                break;
-                            case SIGNED_OUT:
-                                Log.i("AuthQuickstart", "Auth just became signed out.");
-                                break;
-                            case SESSION_EXPIRED:
-                                Log.i("AuthQuickstart", "Auth session just expired.");
-                                break;
-                            default:
-                                Log.w("AuthQuickstart", "Unhandled Auth Event: " + AuthChannelEventName.valueOf(hubEvent.getName()));
-                                break;
-                        }
-                    }
-                }
-        );
-    }
-
-    private void amplifyFetchUserAttributes() {
-        Amplify.Auth.fetchUserAttributes(
-                attributes -> Log.i("AuthDemo", "User attributes = " + attributes.toString()),
-                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
-        );
-    }
-
     private void signUpBtnClicked() {
         email = editTextEmail.getText().toString();
         password = editTextPassword.getText().toString();
+        saveInSharedPreferences(email, password);
         signUp(email, password);
+    }
+
+    private void saveInSharedPreferences(String email, String password) {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("email", email);
+        editor.putString("pw", password);
+        editor.apply();
     }
 
     private void signUp(String email, String password) {
@@ -132,7 +153,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                 AuthSignUpOptions.builder().userAttribute(AuthUserAttributeKey.email(), email).build(),
                 result -> {
                     Log.i("AuthQuickStart", "Result: " + result.toString());
-                    startConfirmActivity();
+                    startTheNextActivity(ConfirmActivity.class);
                 },
                 error -> {
                     Log.d(TAG, "signUp: "+error);
@@ -201,21 +222,21 @@ public class AuthenticationActivity extends AppCompatActivity {
         return false;
     }
 
-    private void startConfirmActivity() {
-        Log.i(TAG, "Starting Confirm Activity");
-        Intent i = new Intent(AuthenticationActivity.this, ConfirmActivity.class);
-        AuthenticationActivity.this.startActivity(i);
+    private void startTheNextActivity(Class target) {
+        Log.i(TAG, "Starting Next Activity");
+        Intent i = new Intent(SignUpActivity.this, target);
+        SignUpActivity.this.startActivity(i);
     }
 
     public void startLoginActivity(View view) {
         Log.i(TAG, "Starting Login Activity");
-        Intent i = new Intent(AuthenticationActivity.this, LoginActivity.class);
-        AuthenticationActivity.this.startActivity(i);
+        Intent i = new Intent(SignUpActivity.this, LoginActivity.class);
+        SignUpActivity.this.startActivity(i);
     }
 
     public void startConfirmActivity(View view) {
         Log.i(TAG, "Starting Confirm Activity");
-        Intent i = new Intent(AuthenticationActivity.this, ConfirmActivity.class);
-        AuthenticationActivity.this.startActivity(i);
+        Intent i = new Intent(SignUpActivity.this, ConfirmActivity.class);
+        SignUpActivity.this.startActivity(i);
     }
 }

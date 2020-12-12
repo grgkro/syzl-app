@@ -5,26 +5,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amplifyframework.core.Amplify;
 
-import java.util.List;
-
-import de.stuttgart.syzl3000.adapters.OnCircleListener;
 import de.stuttgart.syzl3000.adapters.OnCircleListener;
 import de.stuttgart.syzl3000.adapters.CircleRecyclerAdapter;
-import de.stuttgart.syzl3000.models.Circle;
-import de.stuttgart.syzl3000.util.Testing;
 import de.stuttgart.syzl3000.util.VerticalSpacingItemDecorator;
 
 public class CircleListActivity extends BaseActivity implements OnCircleListener {
@@ -174,7 +165,7 @@ public class CircleListActivity extends BaseActivity implements OnCircleListener
 
     public void startAuthenticationActivity() {
         Log.i(TAG, "Starting Authentication Activity");
-        Intent i = new Intent(CircleListActivity.this, AuthenticationActivity.class);
+        Intent i = new Intent(CircleListActivity.this, SignUpActivity.class);
         CircleListActivity.this.startActivity(i);
     }
 

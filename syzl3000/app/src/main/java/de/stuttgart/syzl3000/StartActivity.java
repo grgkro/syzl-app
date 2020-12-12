@@ -1,8 +1,6 @@
 package de.stuttgart.syzl3000;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,9 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.amplifyframework.core.Amplify;
 
-public class LoginActivity extends AppCompatActivity {
+public class StartActivity extends AppCompatActivity {
 
-    private final String TAG = LoginActivity.class.getSimpleName();
+    private final String TAG = StartActivity.class.getSimpleName();
 
     private EditText editTextEmail;
     private EditText editTextPassword;
@@ -50,16 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         String email = editTextEmail.getText().toString();
         String password = editTextPassword.getText().toString();
         Toast.makeText(this, email+password, Toast.LENGTH_SHORT).show();
-        saveInSharedPreferences(email, password);
         login(email, password);
-    }
-
-    private void saveInSharedPreferences(String email, String password) {
-        SharedPreferences sharedPref = getSharedPreferences("de.stuttgart.syzl3000.rem", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("email", email);
-        editor.putString("pw", password);
-        editor.apply();
     }
 
     private void login(String email, String password) {
@@ -69,9 +58,8 @@ public class LoginActivity extends AppCompatActivity {
                 result -> {
                     if (result.isSignInComplete()) {
                         Log.i(TAG, "Sign in succeeded");
-                        rememberDevice();
-                        Intent i = new Intent(LoginActivity.this, SelectTopCategoryActivity.class);
-                        LoginActivity.this.startActivity(i);
+                        Intent i = new Intent(StartActivity.this, SelectTopCategoryActivity.class);
+                        StartActivity.this.startActivity(i);
                     } else {
                         Log.i(TAG,  "Sign in not complete");
                     }
@@ -81,16 +69,10 @@ public class LoginActivity extends AppCompatActivity {
         );
     }
 
-    private void rememberDevice() {
-        Amplify.Auth.rememberDevice(
-                () -> Log.i(TAG, "Remember device succeeded"),
-                error -> Log.e(TAG, "Remember device failed with error " + error.toString()));
-    }
-
     public void startSignUpActivity(View view) {
         redirectFromLoginActivity = true;
         Log.i(TAG, "Starting SignUp Activity");
-        Intent i = new Intent(LoginActivity.this, SignUpActivity.class);
-        LoginActivity.this.startActivity(i);
+        Intent i = new Intent(StartActivity.this, SignUpActivity.class);
+        StartActivity.this.startActivity(i);
     }
 }

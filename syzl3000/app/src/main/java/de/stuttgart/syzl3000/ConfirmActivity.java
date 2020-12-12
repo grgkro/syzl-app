@@ -10,14 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.amplifyframework.AmplifyException;
-import com.amplifyframework.auth.AuthChannelEventName;
-import com.amplifyframework.auth.AuthUserAttributeKey;
-import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
-import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
-import com.amplifyframework.core.InitializationStatus;
-import com.amplifyframework.hub.HubChannel;
 
 public class ConfirmActivity extends AppCompatActivity {
 
@@ -37,42 +30,29 @@ public class ConfirmActivity extends AppCompatActivity {
     }
 
     private void confirmSignUpBtnClicked() {
-        String email = AuthenticationActivity.getEmail();
+        String email = SignUpActivity.getEmail();
         String confirmationCode = editTextConfirmationCode.getText().toString();
         Amplify.Auth.confirmSignUp(
                 email,
                 confirmationCode,
                 result -> {
                     Log.i(TAG, result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete");
+                    rememberDevice();
                     Intent i = new Intent(ConfirmActivity.this, SelectTopCategoryActivity.class);
                     ConfirmActivity.this.startActivity(i);
-//                    singIn(email);
                 },
                 error -> Log.e(TAG, error.toString())
         );
     }
 
-    private void singIn(String email) {
-        String password = AuthenticationActivity.getPassword();
-        Amplify.Auth.signIn(
-                email,
-                password,
-                result -> {
-                    if (result.isSignInComplete()) {
-                        Log.i(TAG, "Sign in succeeded");
-                        Intent i = new Intent(ConfirmActivity.this, SelectTopCategoryActivity.class);
-                        ConfirmActivity.this.startActivity(i);
-                    } else {
-                        Log.i(TAG,  "Sign in not complete");
-                    }
-
-                },
-                error -> Log.e(TAG, error.toString())
-        );
+    private void rememberDevice() {
+        Amplify.Auth.rememberDevice(
+                () -> Log.i(TAG, "Remember device succeeded"),
+                error -> Log.e(TAG, "Remember device failed with error " + error.toString()));
     }
 
     public void resendConfirmationCode(View v) {
-        String email = AuthenticationActivity.getEmail();
+        String email = SignUpActivity.getEmail();
         Amplify.Auth.resendSignUpCode(
                 email,
                 result -> {
