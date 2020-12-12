@@ -10,14 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.amplifyframework.AmplifyException;
-import com.amplifyframework.auth.AuthChannelEventName;
-import com.amplifyframework.auth.AuthUserAttributeKey;
-import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
-import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
-import com.amplifyframework.core.InitializationStatus;
-import com.amplifyframework.hub.HubChannel;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,12 +21,16 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginBtn;
     private static String email;
     private static String password;
+    private static boolean redirectFromLoginActivity;
 
     public static String getEmail() {
         return email;
     }
     public static String getPassword() {
         return password;
+    }
+    public static boolean getRedirectFromLoginActivity() {
+        return redirectFromLoginActivity;
     }
 
     @Override
@@ -73,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void startSignUpActivity(View view) {
+        redirectFromLoginActivity = true;
         Log.i(TAG, "Starting SignUp Activity");
         Intent i = new Intent(LoginActivity.this, AuthenticationActivity.class);
         LoginActivity.this.startActivity(i);

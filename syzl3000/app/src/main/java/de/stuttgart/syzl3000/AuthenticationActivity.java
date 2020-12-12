@@ -48,13 +48,25 @@ public class AuthenticationActivity extends AppCompatActivity {
 
         subscribeAmplifyHub();
 
-        signUpBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signUpBtnClicked();
-            }
-        });
+        signUpBtn.setOnClickListener(v -> signUpBtnClicked());
 
+        if (!redirectFromLoginActivity()) {
+            setUpAmplifyWithAuth();
+        }
+
+
+        signOut();
+        Amplify.Auth.fetchAuthSession(
+                result -> Log.i("AmplifyQuickstart", result.toString()),
+                error -> Log.e("AmplifyQuickstart", error.toString())
+        );
+    }
+
+    private boolean redirectFromLoginActivity() {
+        return LoginActivity.getRedirectFromLoginActivity();
+    }
+
+    private void setUpAmplifyWithAuth() {
         try {
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Log.d(TAG, "onCreate: plugin added");
@@ -64,12 +76,6 @@ public class AuthenticationActivity extends AppCompatActivity {
         } catch (AmplifyException error) {
             Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
         }
-
-        signOut();
-        Amplify.Auth.fetchAuthSession(
-                result -> Log.i("AmplifyQuickstart", result.toString()),
-                error -> Log.e("AmplifyQuickstart", error.toString())
-        );
     }
 
     private void subscribeAmplifyHub() {
