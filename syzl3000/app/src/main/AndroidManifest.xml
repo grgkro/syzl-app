@@ -39,6 +39,8 @@
                 <data android:scheme="syzl" />
             </intent-filter>
         </activity>
+        <activity android:name=".ConfirmActivity" />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".RecipeActivity" />
         <activity android:name=".SelectTopCategoryActivity" />
         <activity android:name=".RecipeListActivity" />

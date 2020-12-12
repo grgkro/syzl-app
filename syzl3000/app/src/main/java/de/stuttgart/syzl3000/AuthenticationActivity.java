@@ -6,15 +6,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.amplifyframework.AmplifyException;
+import com.amplifyframework.auth.AuthChannelEventName;
 import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
+import com.amplifyframework.core.InitializationStatus;
+import com.amplifyframework.hub.HubChannel;
 
 public class AuthenticationActivity extends AppCompatActivity {
 
@@ -22,40 +26,32 @@ public class AuthenticationActivity extends AppCompatActivity {
 
     private EditText editTextEmail;
     private EditText editTextPassword;
-    private EditText editTextConfirmationCode;
     private Button signUpBtn;
-    private Button confirmSignUpBtn;
-    private Button loginBtn;
+    private static String email;
+    private static String password;
+
+    public static String getEmail() {
+        return email;
+    }
+
+    public static String getPassword() {
+        return password;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_authentication);
+        setContentView(R.layout.activity_signup);
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
-        editTextConfirmationCode = findViewById(R.id.editTextConfirmationCode);
-        loginBtn = findViewById(R.id.loginBtn);
         signUpBtn = findViewById(R.id.signUpBtn);
-        confirmSignUpBtn = findViewById(R.id.confirmSignUpBtn);
+
+        subscribeAmplifyHub();
 
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signUpBtnClicked();
-            }
-        });
-
-        confirmSignUpBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirmSignUpBtnClicked();
-            }
-        });
-
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginBtnClicked();
             }
         });
 
@@ -74,54 +70,48 @@ public class AuthenticationActivity extends AppCompatActivity {
                 result -> Log.i("AmplifyQuickstart", result.toString()),
                 error -> Log.e("AmplifyQuickstart", error.toString())
         );
+    }
 
+    private void subscribeAmplifyHub() {
+        Amplify.Hub.subscribe(HubChannel.AUTH,
+                hubEvent -> {
+                    if (hubEvent.getName().equals(InitializationStatus.SUCCEEDED.toString())) {
+                        Log.i("AuthQuickstart", "Auth successfully initialized");
+                    } else if (hubEvent.getName().equals(InitializationStatus.FAILED.toString())){
+                        Log.i("AuthQuickstart", "Auth failed to succeed");
+                    } else {
+                        switch (AuthChannelEventName.valueOf(hubEvent.getName())) {
+                            case SIGNED_IN:
+                                Log.i("AuthQuickstart", "Auth just became signed in.");
+                                amplifyFetchUserAttributes();
+                                break;
+                            case SIGNED_OUT:
+                                Log.i("AuthQuickstart", "Auth just became signed out.");
+                                break;
+                            case SESSION_EXPIRED:
+                                Log.i("AuthQuickstart", "Auth session just expired.");
+                                break;
+                            default:
+                                Log.w("AuthQuickstart", "Unhandled Auth Event: " + AuthChannelEventName.valueOf(hubEvent.getName()));
+                                break;
+                        }
+                    }
+                }
+        );
+    }
 
-
+    private void amplifyFetchUserAttributes() {
+        Amplify.Auth.fetchUserAttributes(
+                attributes -> Log.i("AuthDemo", "User attributes = " + attributes.toString()),
+                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
+        );
     }
 
     private void signUpBtnClicked() {
-        String email = editTextEmail.getText().toString();
-        String password = editTextPassword.getText().toString();
+        email = editTextEmail.getText().toString();
+        password = editTextPassword.getText().toString();
         Toast.makeText(this, email+password, Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "awesomeButtonClicked: " + email + password);
         signUp(email, password);
-    }
-
-    private void confirmSignUpBtnClicked() {
-        String email = editTextEmail.getText().toString();
-        String confirmationCode = editTextConfirmationCode.getText().toString();
-        Amplify.Auth.confirmSignUp(
-                email,
-                confirmationCode,
-                result -> Log.i("AuthQuickstart", result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete"),
-                error -> Log.e("AuthQuickstart", error.toString())
-        );
-    }
-
-    private void loginBtnClicked() {
-        String email = editTextEmail.getText().toString();
-        String password = editTextPassword.getText().toString();
-        Toast.makeText(this, email+password, Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "awesomeButtonClicked: " + email + password);
-        login(email, password);
-    }
-
-    private void login(String email, String password) {
-        Amplify.Auth.signIn(
-                email,
-                password,
-                result -> {
-                    if (result.isSignInComplete()) {
-                        Log.i(TAG, "Sign in succeeded");
-                        Intent i = new Intent(AuthenticationActivity.this, SelectTopCategoryActivity.class);
-                        AuthenticationActivity.this.startActivity(i);
-                    } else {
-                        Log.i(TAG,  "Sign in not complete");
-                    }
-
-                },
-                error -> Log.e(TAG, error.toString())
-        );
     }
 
     private void signUp(String email, String password) {
@@ -129,9 +119,24 @@ public class AuthenticationActivity extends AppCompatActivity {
                 email,
                 password,
                 AuthSignUpOptions.builder().userAttribute(AuthUserAttributeKey.email(), email).build(),
-                result -> Log.i("AuthQuickStart", "Result: " + result.toString()),
+                result -> {
+                    Log.i("AuthQuickStart", "Result: " + result.toString());
+                    startConfirmActivity();
+                },
                 error -> Log.e("AuthQuickStart", "Sign up failed", error)
         );
+    }
+
+    private void startConfirmActivity() {
+        Log.i(TAG, "Starting Confirm Activity");
+        Intent i = new Intent(AuthenticationActivity.this, ConfirmActivity.class);
+        AuthenticationActivity.this.startActivity(i);
+    }
+
+    public void startLoginActivity(View view) {
+        Log.i(TAG, "Starting Login Activity");
+        Intent i = new Intent(AuthenticationActivity.this, LoginActivity.class);
+        AuthenticationActivity.this.startActivity(i);
     }
 
     private void signOut() {
