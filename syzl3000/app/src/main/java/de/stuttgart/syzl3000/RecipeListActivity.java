@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amplifyframework.core.Amplify;
+
 import java.util.List;
 
 
@@ -155,9 +157,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
 
     @Override
     public void onBackPressed() {
-
             displaySearchCategories();
-
     }
 
     @Override
@@ -169,7 +169,9 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
             case R.id.action_circles:
                 Intent intent = new Intent(this, CircleListActivity.class);
                 startActivity(intent);
-
+                return super.onOptionsItemSelected(item);
+            case R.id.action_signOut:
+                signOut();
                 return super.onOptionsItemSelected(item);
             default:
                 return super.onOptionsItemSelected(item);
@@ -181,5 +183,21 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.recipe_search_menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private void signOut() {
+        Amplify.Auth.signOut(
+                () -> {
+                    Log.i("AuthQuickstart", "Signed out successfully");
+                    startAuthenticationActivity();
+                },
+                error -> Log.e(TAG, error.toString())
+        );
+    }
+
+    public void startAuthenticationActivity() {
+        Log.i(TAG, "Starting Authentication Activity");
+        Intent i = new Intent(RecipeListActivity.this, AuthenticationActivity.class);
+        RecipeListActivity.this.startActivity(i);
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +15,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.amplifyframework.core.Amplify;
 
 import java.util.List;
 
@@ -150,10 +153,29 @@ public class CircleListActivity extends BaseActivity implements OnCircleListener
             case R.id.action_circles:
                 displayCircles();
                 return super.onOptionsItemSelected(item);
+            case R.id.action_signOut:
+                signOut();
+                return super.onOptionsItemSelected(item);
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private void signOut() {
+            Amplify.Auth.signOut(
+                    () -> {
+                        Log.i("AuthQuickstart", "Signed out successfully");
+                        startAuthenticationActivity();
+                    },
+                    error -> Log.e(TAG, error.toString())
+            );
+    }
+
+    public void startAuthenticationActivity() {
+        Log.i(TAG, "Starting Authentication Activity");
+        Intent i = new Intent(CircleListActivity.this, AuthenticationActivity.class);
+        CircleListActivity.this.startActivity(i);
     }
 
     @Override

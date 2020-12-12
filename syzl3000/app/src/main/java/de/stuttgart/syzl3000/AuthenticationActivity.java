@@ -2,6 +2,9 @@ package de.stuttgart.syzl3000;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +32,7 @@ public class AuthenticationActivity extends AppCompatActivity {
     private Button signUpBtn;
     private static String email;
     private static String password;
+    private String rememberErrorCause;
 
     public static String getEmail() {
         return email;
@@ -54,11 +58,10 @@ public class AuthenticationActivity extends AppCompatActivity {
             setUpAmplifyWithAuth();
         }
 
-
-        signOut();
+//        signOut();
         Amplify.Auth.fetchAuthSession(
-                result -> Log.i("AmplifyQuickstart", result.toString()),
-                error -> Log.e("AmplifyQuickstart", error.toString())
+                result -> Log.i(TAG, result.toString()),
+                error -> Log.e(TAG, error.toString())
         );
     }
 
@@ -90,6 +93,9 @@ public class AuthenticationActivity extends AppCompatActivity {
                             case SIGNED_IN:
                                 Log.i("AuthQuickstart", "Auth just became signed in.");
                                 amplifyFetchUserAttributes();
+                                Log.i(TAG, "Start TopCategory Activity");
+                                Intent i = new Intent(AuthenticationActivity.this, SelectTopCategoryActivity.class);
+                                AuthenticationActivity.this.startActivity(i);
                                 break;
                             case SIGNED_OUT:
                                 Log.i("AuthQuickstart", "Auth just became signed out.");
@@ -116,7 +122,6 @@ public class AuthenticationActivity extends AppCompatActivity {
     private void signUpBtnClicked() {
         email = editTextEmail.getText().toString();
         password = editTextPassword.getText().toString();
-        Toast.makeText(this, email+password, Toast.LENGTH_SHORT).show();
         signUp(email, password);
     }
 
@@ -129,8 +134,71 @@ public class AuthenticationActivity extends AppCompatActivity {
                     Log.i("AuthQuickStart", "Result: " + result.toString());
                     startConfirmActivity();
                 },
-                error -> Log.e("AuthQuickStart", "Sign up failed", error)
+                error -> {
+                    Log.d(TAG, "signUp: "+error);
+                    Log.e(TAG, "signUp: ", error);
+                    rememberErrorCause = error.getCause().toString();
+                }
         );
+        if(rememberErrorCause != null) {
+            if (isUsernameEmpty(rememberErrorCause)) {
+                Toast.makeText(getBaseContext(), "USERNAME WAS EMPTY", Toast.LENGTH_SHORT).show();
+            } else if (isUsernameWrong(rememberErrorCause)) {
+                Toast.makeText(getBaseContext(), "USERNAME was wrong", Toast.LENGTH_SHORT).show();
+            } else if (isEmailInvalid(rememberErrorCause)) {
+                Toast.makeText(getBaseContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
+            } else if (isAlreadySignedUp(rememberErrorCause)) {
+                Toast.makeText(getBaseContext(), "The given email already exists", Toast.LENGTH_SHORT).show();
+            } else if (isPasswordTooShort(rememberErrorCause)) {
+                Toast.makeText(getBaseContext(), "Password was to short", Toast.LENGTH_SHORT).show();
+            } else if (isPasswordWrong(rememberErrorCause)) {
+                Toast.makeText(getBaseContext(), "Password was wrong", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getBaseContext(), "Sign up failed due to unknown reasons", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private boolean isUsernameEmpty(String cause) {
+        if (cause.contains("'username' failed to satisfy constraint: Member must have length greater than or equal to 1")) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isUsernameWrong(String cause) {
+        if (cause.contains("'username' failed to satisfy constraint: Member must satisfy regular expression pattern")) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAlreadySignedUp(String cause) {
+        if (cause.contains("email already exists")) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isEmailInvalid(String cause) {
+        if (cause.contains("Invalid email address")) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isPasswordTooShort(String cause) {
+        if (cause.contains("'password' failed to satisfy constraint: Member must have length greater than or equal to") || cause.contains("Password did not conform with policy: Password not long enough")) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isPasswordWrong(String cause) {
+        if (cause.contains("'password' failed to satisfy constraint: Member must satisfy regular expression pattern")) {
+            return true;
+        }
+        return false;
     }
 
     private void startConfirmActivity() {
@@ -145,10 +213,9 @@ public class AuthenticationActivity extends AppCompatActivity {
         AuthenticationActivity.this.startActivity(i);
     }
 
-    private void signOut() {
-        Amplify.Auth.signOut(
-                () -> Log.i("AuthQuickstart", "Signed out successfully"),
-                error -> Log.e("AuthQuickstart", error.toString())
-        );
+    public void startConfirmActivity(View view) {
+        Log.i(TAG, "Starting Confirm Activity");
+        Intent i = new Intent(AuthenticationActivity.this, ConfirmActivity.class);
+        AuthenticationActivity.this.startActivity(i);
     }
 }

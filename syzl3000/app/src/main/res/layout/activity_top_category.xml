@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -14,27 +15,45 @@
         android:focusableInTouchMode="true"
         android:visibility="visible"
         android:padding="50dp"
+        >
 
-        android:background="@color/cardview_light_background"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="startLoginActivity"
+            android:focusable="true"
+            android:text="Welcome! Do you wanna syzl through movies or recipes?
+            Click on one of the pictures to select a category:"
+            android:textColor="#fefefe"
+            android:textSize="20dp"
+            android:layout_margin="20dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.904" />
 
-        <!-- imageView for the "select movie" image -->
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/select_movies_image"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="215dp"
             android:clickable="true"
+            android:focusable="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/select_movies"/>
+            android:layout_margin="20dp"
+            android:src="@drawable/select_movies" />
 
-        <!-- imageView for the "select recipe" image -->
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/select_recipes_image"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="215dp"
             android:clickable="true"
+            android:focusable="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/select_recipes"/>
+            android:layout_margin="20dp"
+            android:src="@drawable/select_recipes" />
 
     </LinearLayout>
 
