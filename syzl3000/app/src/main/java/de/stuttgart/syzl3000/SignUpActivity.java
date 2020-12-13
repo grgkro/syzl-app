@@ -20,12 +20,15 @@ import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.core.InitializationStatus;
 import com.amplifyframework.hub.HubChannel;
+import com.pddstudio.preferences.encrypted.EncryptedPreferences;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -37,7 +40,7 @@ public class SignUpActivity extends AppCompatActivity {
     private static String email;
     private static String password;
     private String rememberErrorCause;
-    private SharedPreferences sharedPref;
+    private EncryptedPreferences encryptedPreferences;
 
     public static String getEmail() {
         return email;
@@ -59,23 +62,13 @@ public class SignUpActivity extends AppCompatActivity {
             setUpAmplifyWithAuth();
         }
 
-        sharedPref = getSharedPreferences("de.stuttgart.syzl3000.rem", Context.MODE_PRIVATE);
-        email = sharedPref.getString("email", null);
-        password = sharedPref.getString("pw", null);
+        encryptedPreferences = new EncryptedPreferences.Builder(this).withEncryptionPassword("MyTestPassword").build();
+        email = encryptedPreferences.getString("email", null);
+        password = encryptedPreferences.getString("pw", null);
 
         tryLogIn();
 
-        try {
-            SecretKey key = generateTrulyRandomAESKey();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-
         signUpBtn.setOnClickListener(v -> signUpBtnClicked());
-
-
-
-
     }
 
     private void tryLogIn() {
@@ -102,20 +95,6 @@ public class SignUpActivity extends AppCompatActivity {
                 error -> Log.e(TAG, "Remember device failed with error " + error.toString()));
     }
 
-    public static SecretKey generateTrulyRandomAESKey() throws NoSuchAlgorithmException {
-        // Generate a 256-bit key
-        final int outputKeyLength = 256;
-
-        SecureRandom secureRandom = new SecureRandom();
-        // Do *not* seed secureRandom! Automatically seeded from system entropy.
-        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-        keyGenerator.init(outputKeyLength, secureRandom);
-        SecretKey key = keyGenerator.generateKey();
-        return key;
-//        Note that the security of this approach relies on safeguarding the generated key, which is is predicated on the security of the internal storage. Leaving the target file unencrypted (but set to MODE_PRIVATE) would provide similar security.
-//        https://android-developers.googleblog.com/2013/02/using-cryptography-to-store-credentials.html
-    }
-
     private boolean redirectFromLoginActivity() {
         return LoginActivity.getRedirectFromLoginActivity();
     }
@@ -135,15 +114,11 @@ public class SignUpActivity extends AppCompatActivity {
     private void signUpBtnClicked() {
         email = editTextEmail.getText().toString();
         password = editTextPassword.getText().toString();
-        saveInSharedPreferences(email, password);
+        encryptedPreferences.edit()
+                .putString("email", email)
+                .putString("pw", password)
+                .apply();
         signUp(email, password);
-    }
-
-    private void saveInSharedPreferences(String email, String password) {
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("email", email);
-        editor.putString("pw", password);
-        editor.apply();
     }
 
     private void signUp(String email, String password) {

@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.amplifyframework.core.Amplify;
+import com.pddstudio.preferences.encrypted.EncryptedPreferences;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     private static String email;
     private static String password;
     private static boolean redirectFromLoginActivity;
+    private EncryptedPreferences encryptedPreferences;
 
     public static String getEmail() {
         return email;
@@ -42,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
         loginBtn = findViewById(R.id.loginBtn);
+        encryptedPreferences = new EncryptedPreferences.Builder(this).withEncryptionPassword("MyTestPassword").build();
 
         loginBtn.setOnClickListener(v -> loginBtnClicked());
     }
@@ -50,16 +53,11 @@ public class LoginActivity extends AppCompatActivity {
         String email = editTextEmail.getText().toString();
         String password = editTextPassword.getText().toString();
         Toast.makeText(this, email+password, Toast.LENGTH_SHORT).show();
-        saveInSharedPreferences(email, password);
+        encryptedPreferences.edit()
+                .putString("email", email)
+                .putString("pw", password)
+                .apply();
         login(email, password);
-    }
-
-    private void saveInSharedPreferences(String email, String password) {
-        SharedPreferences sharedPref = getSharedPreferences("de.stuttgart.syzl3000.rem", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("email", email);
-        editor.putString("pw", password);
-        editor.apply();
     }
 
     private void login(String email, String password) {
