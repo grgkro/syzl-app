@@ -14,6 +14,7 @@ import com.amplifyframework.core.Amplify;
 
 import de.stuttgart.syzl3000.R;
 import de.stuttgart.syzl3000.SelectTopCategoryActivity;
+import de.stuttgart.syzl3000.services.AuthService;
 
 public class ConfirmActivity extends AppCompatActivity {
 

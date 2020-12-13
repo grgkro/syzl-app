@@ -1,4 +1,4 @@
-package de.stuttgart.syzl3000.authentication;
+package de.stuttgart.syzl3000.services;
 
 public class AuthService {
 

@@ -19,6 +19,7 @@ import com.pddstudio.preferences.encrypted.EncryptedPreferences;
 
 import de.stuttgart.syzl3000.R;
 import de.stuttgart.syzl3000.SelectTopCategoryActivity;
+import de.stuttgart.syzl3000.services.AuthService;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -27,6 +28,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText editTextEmail;
     private EditText editTextPassword;
     private Button signUpBtn;
+    private AuthService authService;
     private static String email;
     private static String password;
     private String rememberErrorCause;
@@ -47,18 +49,23 @@ public class SignUpActivity extends AppCompatActivity {
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
         signUpBtn = findViewById(R.id.signUpBtn);
+        authService = new AuthService();
 
         if (!redirectFromLoginActivity()) {
             setUpAmplifyWithAuth();
         }
 
-        encryptedPreferences = new EncryptedPreferences.Builder(this).withEncryptionPassword("MyTestPassword").build();
-        email = encryptedPreferences.getString("email", null);
-        password = encryptedPreferences.getString("pw", null);
+        getCredentialsFromSharedPreferences();
 
         tryLogIn();
 
         signUpBtn.setOnClickListener(v -> signUpBtnClicked());
+    }
+
+    private void getCredentialsFromSharedPreferences() {
+        encryptedPreferences = new EncryptedPreferences.Builder(this).withEncryptionPassword("MyTestPassword").build();
+        email = encryptedPreferences.getString("email", null);
+        password = encryptedPreferences.getString("pw", null);
     }
 
     private void tryLogIn() {
@@ -68,12 +75,10 @@ public class SignUpActivity extends AppCompatActivity {
                     result -> {
                         if (result.isSignInComplete()) {
                             Log.i(TAG, "Sign in succeeded");
-                            rememberDevice();
                             startTheNextActivity(SelectTopCategoryActivity.class);
                         } else {
                             Log.i(TAG,  "Sign in not complete");
                         }
-
                     },
                     error -> Log.e(TAG, error.toString())
             );
@@ -104,11 +109,19 @@ public class SignUpActivity extends AppCompatActivity {
     private void signUpBtnClicked() {
         email = editTextEmail.getText().toString();
         password = editTextPassword.getText().toString();
+        if (authService.isEmailValid(email)) {
+            saveEncryptedSharedPreferences(email, password);
+            signUp(email, password);
+        } else {
+            Toast.makeText(getBaseContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void saveEncryptedSharedPreferences(String email, String password) {
         encryptedPreferences.edit()
                 .putString("email", email)
                 .putString("pw", password)
                 .apply();
-        signUp(email, password);
     }
 
     private void signUp(String email, String password) {
@@ -121,27 +134,27 @@ public class SignUpActivity extends AppCompatActivity {
                     startTheNextActivity(ConfirmActivity.class);
                 },
                 error -> {
-                    Log.d(TAG, "signUp: "+error);
                     Log.e(TAG, "signUp: ", error);
-                    rememberErrorCause = error.getCause().toString();
+                    tellUserWhatWentWrong(error.getCause().toString());
                 }
         );
-        if(rememberErrorCause != null) {
-            if (isUsernameEmpty(rememberErrorCause)) {
-                Toast.makeText(getBaseContext(), "USERNAME WAS EMPTY", Toast.LENGTH_SHORT).show();
-            } else if (isUsernameWrong(rememberErrorCause)) {
-                Toast.makeText(getBaseContext(), "USERNAME was wrong", Toast.LENGTH_SHORT).show();
-            } else if (isEmailInvalid(rememberErrorCause)) {
-                Toast.makeText(getBaseContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
-            } else if (isAlreadySignedUp(rememberErrorCause)) {
-                Toast.makeText(getBaseContext(), "The given email already exists", Toast.LENGTH_SHORT).show();
-            } else if (isPasswordTooShort(rememberErrorCause)) {
-                Toast.makeText(getBaseContext(), "Password was to short", Toast.LENGTH_SHORT).show();
-            } else if (isPasswordWrong(rememberErrorCause)) {
-                Toast.makeText(getBaseContext(), "Password was wrong", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getBaseContext(), "Sign up failed due to unknown reasons", Toast.LENGTH_SHORT).show();
-            }
+    }
+
+    private void tellUserWhatWentWrong(String cause) {
+        if (isUsernameEmpty(cause)) {
+            Toast.makeText(getBaseContext(), "USERNAME WAS EMPTY", Toast.LENGTH_SHORT).show();
+        } else if (isUsernameWrong(cause)) {
+            Toast.makeText(getBaseContext(), "USERNAME was wrong", Toast.LENGTH_SHORT).show();
+        } else if (isEmailInvalid(cause)) {
+            Toast.makeText(getBaseContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
+        } else if (isAlreadySignedUp(cause)) {
+            Toast.makeText(getBaseContext(), "The given email already exists", Toast.LENGTH_SHORT).show();
+        } else if (isPasswordTooShort(cause)) {
+            Toast.makeText(getBaseContext(), "Password was to short", Toast.LENGTH_SHORT).show();
+        } else if (isPasswordWrong(cause)) {
+            Toast.makeText(getBaseContext(), "Password was wrong", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getBaseContext(), "Sign up failed due to unknown reasons", Toast.LENGTH_SHORT).show();
         }
     }
 

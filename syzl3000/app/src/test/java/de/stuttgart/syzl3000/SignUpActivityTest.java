@@ -3,7 +3,7 @@ package de.stuttgart.syzl3000;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.stuttgart.syzl3000.authentication.AuthService;
+import de.stuttgart.syzl3000.services.AuthService;
 
 
 import static org.junit.Assert.*;

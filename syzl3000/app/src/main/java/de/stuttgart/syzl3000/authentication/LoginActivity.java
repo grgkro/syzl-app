@@ -15,6 +15,7 @@ import com.pddstudio.preferences.encrypted.EncryptedPreferences;
 
 import de.stuttgart.syzl3000.R;
 import de.stuttgart.syzl3000.SelectTopCategoryActivity;
+import de.stuttgart.syzl3000.services.AuthService;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -25,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginBtn;
     private static String email;
     private static String password;
+    private AuthService authService;
     private static boolean redirectFromLoginActivity;
     private EncryptedPreferences encryptedPreferences;
 
@@ -46,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPassword);
         loginBtn = findViewById(R.id.loginBtn);
         encryptedPreferences = new EncryptedPreferences.Builder(this).withEncryptionPassword("MyTestPassword").build();
+        authService = new AuthService();
 
         loginBtn.setOnClickListener(v -> loginBtnClicked());
     }
@@ -53,12 +56,16 @@ public class LoginActivity extends AppCompatActivity {
     private void loginBtnClicked() {
         String email = editTextEmail.getText().toString();
         String password = editTextPassword.getText().toString();
-        Toast.makeText(this, email+password, Toast.LENGTH_SHORT).show();
-        encryptedPreferences.edit()
-                .putString("email", email)
-                .putString("pw", password)
-                .apply();
-        login(email, password);
+        if (authService.isEmailValid(email)) {
+            encryptedPreferences.edit()
+                    .putString("email", email)
+                    .putString("pw", password)
+                    .apply();
+            login(email, password);
+        } else {
+            Toast.makeText(getBaseContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void login(String email, String password) {
