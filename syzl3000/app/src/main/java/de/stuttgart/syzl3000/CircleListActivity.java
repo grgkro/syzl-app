@@ -16,6 +16,7 @@ import com.amplifyframework.core.Amplify;
 
 import de.stuttgart.syzl3000.adapters.OnCircleListener;
 import de.stuttgart.syzl3000.adapters.CircleRecyclerAdapter;
+import de.stuttgart.syzl3000.authentication.SignUpActivity;
 import de.stuttgart.syzl3000.util.VerticalSpacingItemDecorator;
 
 public class CircleListActivity extends BaseActivity implements OnCircleListener {

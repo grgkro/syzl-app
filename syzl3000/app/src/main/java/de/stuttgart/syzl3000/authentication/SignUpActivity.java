@@ -1,8 +1,6 @@
-package de.stuttgart.syzl3000;
+package de.stuttgart.syzl3000.authentication;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,22 +11,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.amplifyframework.AmplifyException;
-import com.amplifyframework.auth.AuthChannelEventName;
 import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
-import com.amplifyframework.core.InitializationStatus;
-import com.amplifyframework.hub.HubChannel;
 import com.pddstudio.preferences.encrypted.EncryptedPreferences;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
+import de.stuttgart.syzl3000.R;
+import de.stuttgart.syzl3000.SelectTopCategoryActivity;
 
 public class SignUpActivity extends AppCompatActivity {
 

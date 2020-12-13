@@ -23,6 +23,7 @@ import java.util.List;
 
 import de.stuttgart.syzl3000.adapters.OnRecipeListener;
 import de.stuttgart.syzl3000.adapters.RecipeRecyclerAdapter;
+import de.stuttgart.syzl3000.authentication.SignUpActivity;
 import de.stuttgart.syzl3000.models.Recipe;
 import de.stuttgart.syzl3000.util.Testing;
 import de.stuttgart.syzl3000.util.VerticalSpacingItemDecorator;

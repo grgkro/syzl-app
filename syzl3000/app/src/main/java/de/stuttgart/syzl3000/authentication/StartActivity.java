@@ -1,8 +1,6 @@
-package de.stuttgart.syzl3000;
+package de.stuttgart.syzl3000.authentication;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,11 +11,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.amplifyframework.core.Amplify;
-import com.pddstudio.preferences.encrypted.EncryptedPreferences;
 
-public class LoginActivity extends AppCompatActivity {
+import de.stuttgart.syzl3000.R;
+import de.stuttgart.syzl3000.SelectTopCategoryActivity;
 
-    private final String TAG = LoginActivity.class.getSimpleName();
+public class StartActivity extends AppCompatActivity {
+
+    private final String TAG = StartActivity.class.getSimpleName();
 
     private EditText editTextEmail;
     private EditText editTextPassword;
@@ -25,7 +25,6 @@ public class LoginActivity extends AppCompatActivity {
     private static String email;
     private static String password;
     private static boolean redirectFromLoginActivity;
-    private EncryptedPreferences encryptedPreferences;
 
     public static String getEmail() {
         return email;
@@ -44,7 +43,6 @@ public class LoginActivity extends AppCompatActivity {
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
         loginBtn = findViewById(R.id.loginBtn);
-        encryptedPreferences = new EncryptedPreferences.Builder(this).withEncryptionPassword("MyTestPassword").build();
 
         loginBtn.setOnClickListener(v -> loginBtnClicked());
     }
@@ -53,10 +51,6 @@ public class LoginActivity extends AppCompatActivity {
         String email = editTextEmail.getText().toString();
         String password = editTextPassword.getText().toString();
         Toast.makeText(this, email+password, Toast.LENGTH_SHORT).show();
-        encryptedPreferences.edit()
-                .putString("email", email)
-                .putString("pw", password)
-                .apply();
         login(email, password);
     }
 
@@ -67,9 +61,8 @@ public class LoginActivity extends AppCompatActivity {
                 result -> {
                     if (result.isSignInComplete()) {
                         Log.i(TAG, "Sign in succeeded");
-                        rememberDevice();
-                        Intent i = new Intent(LoginActivity.this, SelectTopCategoryActivity.class);
-                        LoginActivity.this.startActivity(i);
+                        Intent i = new Intent(StartActivity.this, SelectTopCategoryActivity.class);
+                        StartActivity.this.startActivity(i);
                     } else {
                         Log.i(TAG,  "Sign in not complete");
                     }
@@ -79,16 +72,10 @@ public class LoginActivity extends AppCompatActivity {
         );
     }
 
-    private void rememberDevice() {
-        Amplify.Auth.rememberDevice(
-                () -> Log.i(TAG, "Remember device succeeded"),
-                error -> Log.e(TAG, "Remember device failed with error " + error.toString()));
-    }
-
     public void startSignUpActivity(View view) {
         redirectFromLoginActivity = true;
         Log.i(TAG, "Starting SignUp Activity");
-        Intent i = new Intent(LoginActivity.this, SignUpActivity.class);
-        LoginActivity.this.startActivity(i);
+        Intent i = new Intent(StartActivity.this, SignUpActivity.class);
+        StartActivity.this.startActivity(i);
     }
 }

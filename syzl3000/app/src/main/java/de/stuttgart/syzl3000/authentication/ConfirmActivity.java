@@ -1,4 +1,4 @@
-package de.stuttgart.syzl3000;
+package de.stuttgart.syzl3000.authentication;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,12 +12,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.amplifyframework.core.Amplify;
 
+import de.stuttgart.syzl3000.R;
+import de.stuttgart.syzl3000.SelectTopCategoryActivity;
+
 public class ConfirmActivity extends AppCompatActivity {
 
     private final String TAG = ConfirmActivity.class.getSimpleName();
 
     private EditText editTextConfirmationCode;
     private Button confirmSignUpBtn;
+    private AuthService authService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +35,16 @@ public class ConfirmActivity extends AppCompatActivity {
 
     private void confirmSignUpBtnClicked() {
         String email = SignUpActivity.getEmail();
-        String confirmationCode = editTextConfirmationCode.getText().toString();
+        if (authService.isEmailValid(email)) {
+            String confirmationCode = editTextConfirmationCode.getText().toString();
+            confirmSignUp(email, confirmationCode);
+        } else {
+            Toast.makeText(getBaseContext(), "Invalid Email address", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void confirmSignUp(String email, String confirmationCode) {
         Amplify.Auth.confirmSignUp(
                 email,
                 confirmationCode,
