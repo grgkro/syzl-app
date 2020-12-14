@@ -17,6 +17,7 @@ import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
 import com.pddstudio.preferences.encrypted.EncryptedPreferences;
 
+import de.stuttgart.syzl3000.CircleListActivity;
 import de.stuttgart.syzl3000.R;
 import de.stuttgart.syzl3000.SelectTopCategoryActivity;
 import de.stuttgart.syzl3000.services.AuthService;
@@ -31,7 +32,6 @@ public class SignUpActivity extends AppCompatActivity {
     private AuthService authService;
     private static String email;
     private static String password;
-    private String rememberErrorCause;
     private EncryptedPreferences encryptedPreferences;
 
     public static String getEmail() {
@@ -57,7 +57,17 @@ public class SignUpActivity extends AppCompatActivity {
 
         getCredentialsFromSharedPreferences();
 
-        tryLogIn();
+//        tryLogIn();
+
+
+
+            Amplify.Auth.signOut(
+                    () -> {
+                        Log.i("AuthQuickstart", "Signed out successfully");
+                    },
+                    error -> Log.e(TAG, error.toString())
+            );
+
 
         signUpBtn.setOnClickListener(v -> signUpBtnClicked());
     }

@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.amplifyframework.core.Amplify;
+import com.pddstudio.preferences.encrypted.EncryptedPreferences;
 
 import de.stuttgart.syzl3000.R;
 import de.stuttgart.syzl3000.SelectTopCategoryActivity;
@@ -23,6 +24,7 @@ public class ConfirmActivity extends AppCompatActivity {
     private EditText editTextConfirmationCode;
     private Button confirmSignUpBtn;
     private AuthService authService;
+    private EncryptedPreferences encryptedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,19 +32,28 @@ public class ConfirmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_confirm);
         editTextConfirmationCode = findViewById(R.id.editTextConfirmationCode);
         confirmSignUpBtn = findViewById(R.id.confirmBtn);
+        authService = new AuthService();
 
         confirmSignUpBtn.setOnClickListener(v -> confirmSignUpBtnClicked());
     }
 
     private void confirmSignUpBtnClicked() {
         String email = SignUpActivity.getEmail();
-        if (authService.isEmailValid(email)) {
+        if (email == null) {
+            email = getCredentialsFromSharedPreferences();
+        }
+        if (email != null && authService.isEmailValid(email)) {
             String confirmationCode = editTextConfirmationCode.getText().toString();
             confirmSignUp(email, confirmationCode);
         } else {
             Toast.makeText(getBaseContext(), "Invalid Email address", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private String getCredentialsFromSharedPreferences() {
+        encryptedPreferences = new EncryptedPreferences.Builder(this).withEncryptionPassword("MyTestPassword").build();
+        return encryptedPreferences.getString("email", null);
     }
 
     private void confirmSignUp(String email, String confirmationCode) {
