@@ -43,8 +43,8 @@
         <activity android:name=".menu.ProfileActivity" />
         <activity android:name=".authentication.LoginActivity" />
         <activity android:name=".RecipeActivity" />
-        <activity android:name=".authentication.SignUpActivity" />
         <activity android:name=".RecipeListActivity" />
+        <activity android:name=".authentication.SignUpActivity" />
         <activity android:name=".CircleListActivity" />
         <activity android:name=".SwipeActivity" />
     </application>
