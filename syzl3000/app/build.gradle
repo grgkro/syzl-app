@@ -31,6 +31,7 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     def retrofitVersion = "2.9.0"
     def lifecycle_version = "1.1.1"
     def cardview_version = "1.0.0"
@@ -102,6 +103,14 @@ dependencies {
     testImplementation 'androidx.test:core:1.0.0'
     // Optional -- Mockito framework
     testImplementation 'org.mockito:mockito-core:1.10.19'
+
+    def fragment_version = "1.2.5"
+
+    // Java language implementation
+    implementation "androidx.fragment:fragment:$fragment_version"
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'app/libs')
 
 
 //    implementation 'com.android.support:appcompat-v7:24.0.0'

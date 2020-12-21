@@ -21,7 +21,7 @@
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
 <!--        </activity>-->
-        <activity android:name=".authentication.SignUpActivity">
+        <activity android:name=".SelectTopCategoryActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,9 +40,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".authentication.ConfirmActivity" />
+        <activity android:name=".menu.ProfileActivity" />
         <activity android:name=".authentication.LoginActivity" />
         <activity android:name=".RecipeActivity" />
-        <activity android:name=".SelectTopCategoryActivity" />
+        <activity android:name=".authentication.SignUpActivity" />
         <activity android:name=".RecipeListActivity" />
         <activity android:name=".CircleListActivity" />
         <activity android:name=".SwipeActivity" />

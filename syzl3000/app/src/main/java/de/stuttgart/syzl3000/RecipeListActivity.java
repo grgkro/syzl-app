@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.amplifyframework.core.Amplify;
 
@@ -24,6 +25,7 @@ import java.util.List;
 import de.stuttgart.syzl3000.adapters.OnRecipeListener;
 import de.stuttgart.syzl3000.adapters.RecipeRecyclerAdapter;
 import de.stuttgart.syzl3000.authentication.SignUpActivity;
+import de.stuttgart.syzl3000.menu.ProfileActivity;
 import de.stuttgart.syzl3000.models.Recipe;
 import de.stuttgart.syzl3000.util.Testing;
 import de.stuttgart.syzl3000.util.VerticalSpacingItemDecorator;
@@ -42,6 +44,8 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
     private Boolean mIsShowingSwipeActivity;
     private Boolean mSwipeActivityFinished;
 
+    private ViewPager viewPager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         context = this;
 
         mRecipeListViewModel = new ViewModelProvider(this).get(RecipeListViewModel.class);
+
 
         initRecyclerView();
         subscribeObservers();
@@ -170,6 +175,9 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
                 Intent intent = new Intent(this, CircleListActivity.class);
                 startActivity(intent);
                 return super.onOptionsItemSelected(item);
+            case R.id.action_profile:
+                openProfile();
+                return super.onOptionsItemSelected(item);
             case R.id.action_signOut:
                 signOut();
                 return super.onOptionsItemSelected(item);
@@ -177,6 +185,12 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private void openProfile() {
+        Log.d(TAG, "openProfileFragment: Going to open Profile");
+        Intent i = new Intent(RecipeListActivity.this, ProfileActivity.class);
+        RecipeListActivity.this.startActivity(i);
     }
 
     @Override

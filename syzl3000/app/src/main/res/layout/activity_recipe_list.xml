@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".RecipeListActivity">
 
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recipe_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">  <!-- this line tells the RecyclerView to start underneath the custom toolbar -->
+
+        </androidx.recyclerview.widget.RecyclerView>
+
     <!--  CoordinatorLayout always needs a AppBarLayout as direct child-->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -15,7 +24,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:contentInsetStart="0dp"
             app:layout_scrollFlags="scroll|enterAlways"> <!-- this line determines the custom scrolling behaviour -->
 
@@ -31,13 +40,5 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recipe_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">  <!-- this line tells the RecyclerView to start underneath the custom toolbar -->
-
-    </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

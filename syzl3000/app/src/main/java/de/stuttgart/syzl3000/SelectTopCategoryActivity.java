@@ -34,14 +34,12 @@ public class SelectTopCategoryActivity extends BaseActivity {
 
     private static final String TAG = "SelectTopCategoryActiv";
 
-    private LinearLayout mLayout;
     private AppCompatImageView mRecipesImage, mMoviesImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_category);
-        mLayout = findViewById(R.id.select_top_category_layout);
         mMoviesImage = findViewById(R.id.select_movies_image);
         mRecipesImage = findViewById(R.id.select_recipes_image);
 
@@ -61,10 +59,6 @@ public class SelectTopCategoryActivity extends BaseActivity {
                 //startActivity(intent);
             }
         });
-    }
-
-    public void onCategoryClick(String category) {
-
     }
 
     @Override

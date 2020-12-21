@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.amplifyframework.auth.cognito.AWSCognitoAuthSession;
 import com.amplifyframework.core.Amplify;
 import com.pddstudio.preferences.encrypted.EncryptedPreferences;
 
@@ -62,6 +63,8 @@ public class LoginActivity extends AppCompatActivity {
                     .putString("pw", password)
                     .apply();
             login(email, password);
+            Log.d(TAG, "deleteUser: start");
+
         } else {
             Toast.makeText(getBaseContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
         }
@@ -76,6 +79,19 @@ public class LoginActivity extends AppCompatActivity {
                     if (result.isSignInComplete()) {
                         Log.i(TAG, "Sign in succeeded");
                         rememberDevice();
+                        Amplify.Auth.fetchAuthSession(
+                                result2 -> {
+                                    AWSCognitoAuthSession cognitoAuthSession = (AWSCognitoAuthSession) result2;
+                                    switch(cognitoAuthSession.getIdentityId().getType()) {
+                                        case SUCCESS:
+                                            Log.i("AuthQuickStart", "IdentityId: " + cognitoAuthSession.getIdentityId().getValue());
+                                            break;
+                                        case FAILURE:
+                                            Log.i("AuthQuickStart", "IdentityId not present because: " + cognitoAuthSession.getIdentityId().getError().toString());
+                                    }
+                                },
+                                error -> Log.e("AuthQuickStart", error.toString())
+                        );
                         Intent i = new Intent(LoginActivity.this, SelectTopCategoryActivity.class);
                         LoginActivity.this.startActivity(i);
                     } else {
