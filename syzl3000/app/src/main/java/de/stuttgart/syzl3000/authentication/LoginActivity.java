@@ -83,8 +83,9 @@ public class LoginActivity extends AppCompatActivity {
                     if (result.isSignInComplete()) {
                         Log.i(TAG, "Sign in succeeded");
                         rememberDevice();
-                        Intent i = new Intent(LoginActivity.this, SelectTopCategoryActivity.class);
-                        LoginActivity.this.startActivity(i);
+                        Intent intent = new Intent(LoginActivity.this, SelectTopCategoryActivity.class);
+                        intent.putExtra("isRedirect", true);
+                        LoginActivity.this.startActivity(intent);
                     } else {
                         Log.i(TAG,  "Sign in not complete");
                     }

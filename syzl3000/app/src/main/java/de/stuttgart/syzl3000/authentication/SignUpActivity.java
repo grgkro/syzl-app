@@ -51,7 +51,7 @@ public class SignUpActivity extends AppCompatActivity {
         signUpBtn = findViewById(R.id.signUpBtn);
         authService = new AuthService();
 
-        if (!redirectFromLoginActivity()) {
+        if (!getIntent().getBooleanExtra("isRedirect", false)) {
             setUpAmplifyWithAuth();
         }
 
@@ -107,12 +107,11 @@ public class SignUpActivity extends AppCompatActivity {
     private void setUpAmplifyWithAuth() {
         try {
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
-            Log.d(TAG, "onCreate: plugin added");
+            Log.d(TAG, "onCreate: plugin Auth added");
             Amplify.configure(getApplicationContext());
-            Log.i("MyAmplifyApp", "Initialized Amplify");
-            Log.d(TAG, "onCreate: configured");
+            Log.i(TAG, "Initialized Amplify");
         } catch (AmplifyException error) {
-            Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
+            Log.e(TAG, "Could not initialize Amplify.", error);
         }
     }
 
@@ -140,7 +139,7 @@ public class SignUpActivity extends AppCompatActivity {
                 password,
                 AuthSignUpOptions.builder().userAttribute(AuthUserAttributeKey.email(), email).build(),
                 result -> {
-                    Log.i("AuthQuickStart", "Result: " + result.toString());
+                    Log.i(TAG, "SIGN UP Result: " + result.toString());
                     startTheNextActivity(ConfirmActivity.class);
                 },
                 error -> {

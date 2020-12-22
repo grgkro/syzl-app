@@ -41,6 +41,7 @@ public class ProfileActivity extends AppCompatActivity {
     private static final String TAG = "ProfileActivity";
     private List<AuthUserAttribute> userAttributeList;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +75,7 @@ public class ProfileActivity extends AppCompatActivity {
                 client.usersDelete(userAttributeList.get(0).getValue());
                 result = "Successfully deleted account " + userAttributeList.get(2).getValue();
                 Intent intent = new Intent(ProfileActivity.this, SignUpActivity.class);
+                intent.putExtra("isRedirect", true);
                 startActivity(intent);
                 return null;
             } catch (Exception e) {
