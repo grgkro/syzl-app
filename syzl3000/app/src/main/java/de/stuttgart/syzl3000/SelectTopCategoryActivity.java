@@ -18,6 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amplifyframework.core.Amplify;
+
 import java.util.List;
 
 import de.stuttgart.syzl3000.BaseActivity;
@@ -59,6 +61,11 @@ public class SelectTopCategoryActivity extends BaseActivity {
                 //startActivity(intent);
             }
         });
+
+        Amplify.Auth.fetchUserAttributes(
+                attributes -> Log.i("AuthDemo", "User attributes = " + attributes.toString()),
+                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
+        );
     }
 
     @Override

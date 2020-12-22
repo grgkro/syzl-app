@@ -15,10 +15,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.client.results.Tokens;
 import com.amazonaws.mobileconnectors.apigateway.ApiClientFactory;
 import com.amazonaws.mobileconnectors.cognitoauth.Auth;
+import com.amplifyframework.auth.AuthUser;
+import com.amplifyframework.auth.AuthUserAttribute;
+import com.amplifyframework.core.Amplify;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import de.stuttgart.syzl3000.BaseActivity;
 import de.stuttgart.syzl3000.CircleListActivity;
@@ -32,6 +39,7 @@ import de.stuttgart.syzl3000.services.AuthService;;
 public class ProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "ProfileActivity";
+    private List<AuthUserAttribute> userAttributeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +49,19 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void deleteAccount(View view) {
         Log.d(TAG, "deleteAccount: delete Btn clicked");
-        new MyTask().execute();
+        Log.i(TAG, "going to fetch User attributes");
+        Amplify.Auth.fetchUserAttributes(
+                attributes -> {
+                    Log.i("AuthDemo", "User attributes = " + attributes);
+                    userAttributeList = attributes;
+                    Log.d(TAG, "deleteAccount: " + userAttributeList.get(0).getValue());
+                    Log.d(TAG, "deleteAccount email: " + userAttributeList.get(2).getValue());
+                    new MyTask().execute();
+                },
+                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
+        );
+        Log.i(TAG, "end of fetching User attributes");
+
     }
 
     private class MyTask extends AsyncTask<Void, Void, Void> {
@@ -51,8 +71,8 @@ public class ProfileActivity extends AppCompatActivity {
             try {
                 ApiClientFactory factory = new ApiClientFactory();
                 final LambdaSimpleProxyClient client = factory.build(LambdaSimpleProxyClient.class);
-                client.usersDelete("0d59eebf-b94c-429d-b351-942e7807f1e1");
-                result = "Success";
+                client.usersDelete(userAttributeList.get(0).getValue());
+                result = "Successfully deleted account " + userAttributeList.get(2).getValue();
                 Intent intent = new Intent(ProfileActivity.this, SignUpActivity.class);
                 startActivity(intent);
                 return null;
