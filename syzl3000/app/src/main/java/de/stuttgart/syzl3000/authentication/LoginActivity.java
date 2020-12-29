@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.client.results.Token;
 import com.amazonaws.mobile.client.results.Tokens;
 import com.amazonaws.mobileconnectors.cognitoauth.Auth;
 import com.amplifyframework.auth.AuthUser;
@@ -83,6 +84,8 @@ public class LoginActivity extends AppCompatActivity {
                     if (result.isSignInComplete()) {
                         Log.i(TAG, "Sign in succeeded");
                         rememberDevice();
+                        String idToken = getIDToken();
+                        saveTokenInEncryptedSharedPreferences(idToken);
                         Intent intent = new Intent(LoginActivity.this, SelectTopCategoryActivity.class);
                         intent.putExtra("isRedirect", true);
                         LoginActivity.this.startActivity(intent);
@@ -93,6 +96,30 @@ public class LoginActivity extends AppCompatActivity {
                 },
                 error -> Log.e(TAG, error.toString())
         );
+    }
+
+    private String getIDToken() {
+        try {
+            Token idToken = AWSMobileClient.getInstance().getTokens().getIdToken();
+            Log.d(TAG, "getIDToken: " +  idToken.getTokenString());
+            return idToken.getTokenString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void saveTokenInEncryptedSharedPreferences(String token) {
+        encryptedPreferences.edit()
+                .putString("token", token)
+                .apply();
+    }
+
+    private void saveEncryptedSharedPreferences(String email, String password) {
+        encryptedPreferences.edit()
+                .putString("email", email)
+                .putString("pw", password)
+                .apply();
     }
 
     private void rememberDevice() {
