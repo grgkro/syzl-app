@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.client.results.Token;
 import com.amplifyframework.core.Amplify;
 import com.pddstudio.preferences.encrypted.EncryptedPreferences;
 
@@ -87,6 +89,8 @@ public class ConfirmActivity extends AppCompatActivity {
                 result -> {
                     if (result.isSignInComplete()) {
                         Log.i(TAG, "Sign in succeeded");
+                        String idToken = getIDToken();
+                        saveTokenInEncryptedSharedPreferences(idToken);
                         Intent i = new Intent(ConfirmActivity.this, SelectTopCategoryActivity.class);
                         ConfirmActivity.this.startActivity(i);
                     } else {
@@ -95,6 +99,23 @@ public class ConfirmActivity extends AppCompatActivity {
                 },
                 error -> Log.e(TAG, error.toString())
         );
+    }
+
+    private String getIDToken() {
+        try {
+            Token idToken = AWSMobileClient.getInstance().getTokens().getIdToken();
+            Log.d(TAG, "getIDToken: " +  idToken.getTokenString());
+            return idToken.getTokenString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void saveTokenInEncryptedSharedPreferences(String token) {
+        encryptedPreferences.edit()
+                .putString("token", token)
+                .apply();
     }
 
     public void resendConfirmationCode(View v) {
