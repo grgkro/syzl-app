@@ -143,7 +143,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
     @Override
     public void onRecipeClick(int position) {
         Intent intent = new Intent(this, SwipeActivity.class);
-//        intent.putExtra("recipe", mRecipeRecyclerAdapter.getSelectedRecipe(position));
+//        intent.put("recipe", mRecipeRecyclerAdapter.getSelectedRecipe(position));
 //        startActivity(intent);
     }
 
@@ -173,6 +173,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
                 return super.onOptionsItemSelected(item);
             case R.id.action_circles:
                 Intent intent = new Intent(this, CircleListActivity.class);
+                intent.putExtra("category", "Recipes");
                 startActivity(intent);
                 return super.onOptionsItemSelected(item);
             case R.id.action_profile:

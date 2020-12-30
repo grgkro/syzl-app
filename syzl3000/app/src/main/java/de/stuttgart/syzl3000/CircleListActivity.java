@@ -13,28 +13,94 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amplifyframework.core.Amplify;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.pddstudio.preferences.encrypted.EncryptedPreferences;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import de.stuttgart.syzl3000.adapters.OnCircleListener;
 import de.stuttgart.syzl3000.adapters.CircleRecyclerAdapter;
 import de.stuttgart.syzl3000.authentication.SignUpActivity;
+import de.stuttgart.syzl3000.util.RequestQueueSingleton;
 import de.stuttgart.syzl3000.util.VerticalSpacingItemDecorator;
+
+import static de.stuttgart.syzl3000.util.Constants.BRUDDAAL_BASE_URL;
 
 public class CircleListActivity extends BaseActivity implements OnCircleListener {
 
     private static final String TAG = "CircleListActivity";
 
-//    private CircleListViewModel mCircleListViewModel;
+    //    private CircleListViewModel mCircleListViewModel;
     private RecyclerView mRecyclerView;
     private CircleRecyclerAdapter mCircleRecyclerAdapter;
     private SearchView mSearchView;
     private RecipeListActivity mRecipyListActivity;
+    private EncryptedPreferences encryptedPreferences;
+    private String email;
+    private String password;
+    private String idToken;
+    private String sub;
+    private String category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_circle_list);
+
+        getCredentialsFromSharedPreferences();
+
         // Get the Intent that started this activity and extract the string
-        Intent intent = getIntent();
+        category = getIntent().getStringExtra("category");
+        Log.d(TAG, "The intent: " + category);
+
+        Amplify.Auth.fetchUserAttributes(
+                attributes -> {
+                    Log.i("AuthDemo", "User attributes = " + attributes.toString());
+                    sub = attributes.get(0).getValue();
+                    Log.i("AuthDemo", "User attributes = " + sub);
+                },
+                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
+        );
+
+        if (category.equals("Recipes")) {
+//            RequestQueue queue = RequestQueueSingleton.getInstance(this.getApplicationContext()).
+//                    getRequestQueue();
+
+            String url = BRUDDAAL_BASE_URL + "users/" + sub + "/gangs";
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d(TAG, "Response: " + response.toString());
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+                            Log.d(TAG, "Error retrieving gangs" + error);
+                        }
+                    }) {    //this is the part, that adds the header to the request
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("Authorization", idToken);
+                    params.put("content-type", "application/json");
+                    return params;
+                }
+            };
+            RequestQueueSingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+        }
 
         mRecyclerView = findViewById(R.id.circle_list);  // in activity_circle_list -> it's where we actually display the single circle Views
         mSearchView = findViewById(R.id.search_view);
@@ -50,7 +116,7 @@ public class CircleListActivity extends BaseActivity implements OnCircleListener
 //            // display the search categories
 //            displaySearchCategories();
 //        }
-        setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
     }
 
 //    private void subscribeObservers() {
@@ -69,6 +135,13 @@ public class CircleListActivity extends BaseActivity implements OnCircleListener
 //            }
 //        });
 //    }
+
+    private void getCredentialsFromSharedPreferences() {
+        encryptedPreferences = new EncryptedPreferences.Builder(this).withEncryptionPassword("MyTestPassword").build();
+        email = encryptedPreferences.getString("email", null);
+        password = encryptedPreferences.getString("pw", null);
+        idToken = encryptedPreferences.getString("idToken", null);
+    }
 
     private void initRecyclerView() {
         mCircleRecyclerAdapter = new CircleRecyclerAdapter(this);
@@ -113,26 +186,24 @@ public class CircleListActivity extends BaseActivity implements OnCircleListener
     }
 
 
-
     void displayCircles() {
 //        mCircleListViewModel.setIsViewingCircles(false);
-      if (mCircleRecyclerAdapter != null) {
-          mCircleRecyclerAdapter.displayCircles();
-      } else {
-          initRecyclerView();
-          mCircleRecyclerAdapter.displayCircles();
-      }
+        if (mCircleRecyclerAdapter != null) {
+            mCircleRecyclerAdapter.displayCircles();
+        } else {
+            initRecyclerView();
+            mCircleRecyclerAdapter.displayCircles();
+        }
 
     }
 
     @Override
     public void onBackPressed() {
-//        if (mCircleListViewModel.onBackPressed()) {
-//            super.onBackPressed();
-//        } else {
-//            displaySearchCategories();
-//        }
-        Log.d(TAG, "onBackPressed: not implemented yet" );
+        if (category.equals("Recipes")) {
+            startRecipeListActivity();
+        } else if (category.equals("Movies")) {
+            Log.d(TAG, "onBackPressed: Not implemented yet for Movies");
+        }
     }
 
     @Override
@@ -155,18 +226,24 @@ public class CircleListActivity extends BaseActivity implements OnCircleListener
     }
 
     private void signOut() {
-            Amplify.Auth.signOut(
-                    () -> {
-                        Log.i("AuthQuickstart", "Signed out successfully");
-                        startAuthenticationActivity();
-                    },
-                    error -> Log.e(TAG, error.toString())
-            );
+        Amplify.Auth.signOut(
+                () -> {
+                    Log.i("AuthQuickstart", "Signed out successfully");
+                    startAuthenticationActivity();
+                },
+                error -> Log.e(TAG, error.toString())
+        );
     }
 
     public void startAuthenticationActivity() {
         Log.i(TAG, "Starting Authentication Activity");
         Intent i = new Intent(CircleListActivity.this, SignUpActivity.class);
+        CircleListActivity.this.startActivity(i);
+    }
+
+    public void startRecipeListActivity() {
+        Log.i(TAG, "Starting RecipeList Activity");
+        Intent i = new Intent(CircleListActivity.this, RecipeListActivity.class);
         CircleListActivity.this.startActivity(i);
     }
 

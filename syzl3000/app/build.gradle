@@ -112,6 +112,10 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation fileTree(include: ['*.jar'], dir: 'app/libs')
 
+    //HTTP Requests https://developer.android.com/training/volley
+    implementation 'com.android.volley:volley:1.1.1'
+
+
 
 //    implementation 'com.android.support:appcompat-v7:24.0.0'
 //    implementation 'com.android.support:design:24.2.1'

@@ -114,7 +114,7 @@ public class ConfirmActivity extends AppCompatActivity {
 
     private void saveTokenInEncryptedSharedPreferences(String token) {
         encryptedPreferences.edit()
-                .putString("token", token)
+                .putString("idToken", token)
                 .apply();
     }
 

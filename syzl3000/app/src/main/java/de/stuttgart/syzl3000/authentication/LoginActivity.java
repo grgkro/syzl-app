@@ -85,7 +85,8 @@ public class LoginActivity extends AppCompatActivity {
                         Log.i(TAG, "Sign in succeeded");
                         rememberDevice();
                         String idToken = getIDToken();
-                        saveTokenInEncryptedSharedPreferences(idToken);
+                        Log.d(TAG, "login TOKEN (remove this line later): " + idToken);
+                        saveEncryptedSharedPreferences(email, password, idToken);
                         Intent intent = new Intent(LoginActivity.this, SelectTopCategoryActivity.class);
                         intent.putExtra("isRedirect", true);
                         LoginActivity.this.startActivity(intent);
@@ -109,16 +110,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void saveTokenInEncryptedSharedPreferences(String token) {
-        encryptedPreferences.edit()
-                .putString("token", token)
-                .apply();
-    }
-
-    private void saveEncryptedSharedPreferences(String email, String password) {
+    private void saveEncryptedSharedPreferences(String email, String password, String idToken) {
         encryptedPreferences.edit()
                 .putString("email", email)
                 .putString("pw", password)
+                .putString("idToken", idToken)
                 .apply();
     }
 
