@@ -63,13 +63,33 @@ public class CircleListActivity extends BaseActivity implements OnCircleListener
 
         Amplify.Auth.fetchUserAttributes(
                 attributes -> {
-                    Log.i("AuthDemo", "User attributes = " + attributes.toString());
+                    Log.i(TAG, "User attributes = " + attributes.toString());
                     sub = attributes.get(0).getValue();
-                    Log.i("AuthDemo", "User attributes = " + sub);
+                    Log.i(TAG, "User sub = " + sub);
+                    getGangs();
                 },
                 error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
         );
 
+        mRecyclerView = findViewById(R.id.circle_list);  // in activity_circle_list -> it's where we actually display the single circle Views
+        mSearchView = findViewById(R.id.search_view);
+
+//        mCircleListViewModel = new ViewModelProvider(this).get(CircleListViewModel.class);
+
+        initRecyclerView();
+//        subscribeObservers();
+//        initSearchView();
+        displayCircles();
+
+//        if(!mCircleListViewModel.isViewingCircles()) {
+//            // display the search categories
+//            displaySearchCategories();
+//        }
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+    }
+
+    private void getGangs() {
+        Log.i(TAG, "Going to GET the Gangs of this user.");
         if (category.equals("Recipes")) {
 //            RequestQueue queue = RequestQueueSingleton.getInstance(this.getApplicationContext()).
 //                    getRequestQueue();
@@ -101,22 +121,6 @@ public class CircleListActivity extends BaseActivity implements OnCircleListener
             };
             RequestQueueSingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
         }
-
-        mRecyclerView = findViewById(R.id.circle_list);  // in activity_circle_list -> it's where we actually display the single circle Views
-        mSearchView = findViewById(R.id.search_view);
-
-//        mCircleListViewModel = new ViewModelProvider(this).get(CircleListViewModel.class);
-
-        initRecyclerView();
-//        subscribeObservers();
-//        initSearchView();
-        displayCircles();
-
-//        if(!mCircleListViewModel.isViewingCircles()) {
-//            // display the search categories
-//            displaySearchCategories();
-//        }
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
     }
 
 //    private void subscribeObservers() {

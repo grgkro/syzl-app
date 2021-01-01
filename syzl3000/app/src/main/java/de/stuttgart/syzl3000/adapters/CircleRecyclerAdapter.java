@@ -1,6 +1,7 @@
 package de.stuttgart.syzl3000.adapters;
 
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,17 +9,29 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amplifyframework.core.Amplify;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.stuttgart.syzl3000.R;
 import de.stuttgart.syzl3000.models.Circle;
 import de.stuttgart.syzl3000.models.Recipe;
 import de.stuttgart.syzl3000.util.Constants;
+import de.stuttgart.syzl3000.util.RequestQueueSingleton;
+
+import static de.stuttgart.syzl3000.util.Constants.BRUDDAAL_BASE_URL;
 
 // the Adapter sends the data to the view. We want to use this adapter for different views (Recipe List View, Single Recipe View, Loading Screen, No Recipes Found View, etc.), so we use the generic ViewType RecyclerView.ViewHolder
 public class CircleRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -28,6 +41,7 @@ public class CircleRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     private List<Circle> mCircles;
     private OnCircleListener mOnCircleListener;
+
 
     public CircleRecyclerAdapter(OnCircleListener OnCircleListener) {
         mOnCircleListener = OnCircleListener;

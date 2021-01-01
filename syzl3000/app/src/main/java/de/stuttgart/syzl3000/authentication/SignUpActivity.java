@@ -143,7 +143,7 @@ public class SignUpActivity extends AppCompatActivity {
                     startTheNextActivity(ConfirmActivity.class);
                 },
                 error -> {
-                    Log.e(TAG, "signUp: ", error);
+                    Log.e(TAG, "signUp Error: ", error);
                     tellUserWhatWentWrong(error.getCause().toString());
                 }
         );
@@ -151,19 +151,26 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void tellUserWhatWentWrong(String cause) {
         if (isUsernameEmpty(cause)) {
-            Toast.makeText(getBaseContext(), "USERNAME WAS EMPTY", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "tellUserWhatWentWrong: USERNAME WAS EMPTY");
+//            Toast.makeText(getBaseContext(), "USERNAME WAS EMPTY", Toast.LENGTH_SHORT).show();
         } else if (isUsernameWrong(cause)) {
-            Toast.makeText(getBaseContext(), "USERNAME was wrong", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "tellUserWhatWentWrong: USERNAME was wrong");
+//            Toast.makeText(getBaseContext(), "USERNAME was wrong", Toast.LENGTH_SHORT).show();
         } else if (isEmailInvalid(cause)) {
-            Toast.makeText(getBaseContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "tellUserWhatWentWrong: Invalid email address");
+//            Toast.makeText(getBaseContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
         } else if (isAlreadySignedUp(cause)) {
-            Toast.makeText(getBaseContext(), "The given email already exists", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "tellUserWhatWentWrong: The given email already exists");
+//            Toast.makeText(getBaseContext(), "The given email already exists", Toast.LENGTH_SHORT).show();
         } else if (isPasswordTooShort(cause)) {
-            Toast.makeText(getBaseContext(), "Password was to short", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "tellUserWhatWentWrong: Password was to short");
+//            Toast.makeText(getBaseContext(), "Password was to short", Toast.LENGTH_SHORT).show();
         } else if (isPasswordWrong(cause)) {
-            Toast.makeText(getBaseContext(), "Password was wrong", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "tellUserWhatWentWrong: Password was wrong");
+//            Toast.makeText(getBaseContext(), "Password was wrong", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getBaseContext(), "Sign up failed due to unknown reasons", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "tellUserWhatWentWrong: Sign up failed due to unknown reasons");
+//            Toast.makeText(getBaseContext(), "Sign up failed due to unknown reasons", Toast.LENGTH_SHORT).show();
         }
     }
 

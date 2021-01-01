@@ -128,6 +128,7 @@ public class LoginActivity extends AppCompatActivity {
         redirectFromLoginActivity = true;
         Log.i(TAG, "Starting SignUp Activity");
         Intent i = new Intent(LoginActivity.this, SignUpActivity.class);
+        i.putExtra("isRedirect", true);
         LoginActivity.this.startActivity(i);
     }
 }
