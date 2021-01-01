@@ -100,10 +100,6 @@ public class SignUpActivity extends AppCompatActivity {
                 error -> Log.e(TAG, "Remember device failed with error " + error.toString()));
     }
 
-    private boolean redirectFromLoginActivity() {
-        return LoginActivity.getRedirectFromLoginActivity();
-    }
-
     private void setUpAmplifyWithAuth() {
         try {
             Amplify.addPlugin(new AWSCognitoAuthPlugin());

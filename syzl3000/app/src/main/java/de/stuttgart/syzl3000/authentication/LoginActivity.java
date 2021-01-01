@@ -35,7 +35,6 @@ public class LoginActivity extends AppCompatActivity {
     private static String email;
     private static String password;
     private AuthService authService;
-    private static boolean redirectFromLoginActivity;
     private EncryptedPreferences encryptedPreferences;
 
     public static String getEmail() {
@@ -43,9 +42,6 @@ public class LoginActivity extends AppCompatActivity {
     }
     public static String getPassword() {
         return password;
-    }
-    public static boolean getRedirectFromLoginActivity() {
-        return redirectFromLoginActivity;
     }
 
     @Override
@@ -125,7 +121,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void startSignUpActivity(View view) {
-        redirectFromLoginActivity = true;
         Log.i(TAG, "Starting SignUp Activity");
         Intent i = new Intent(LoginActivity.this, SignUpActivity.class);
         i.putExtra("isRedirect", true);
