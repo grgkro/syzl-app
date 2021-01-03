@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.i(TAG, "Sign in succeeded");
                         rememberDevice();
                         String idToken = getIDToken();
-                        Log.d(TAG, "login TOKEN (remove this line later): " + idToken);
+                        Log.i(TAG, "login TOKEN (remove this line later): " + idToken);
                         saveEncryptedSharedPreferences(email, password, idToken);
                         Intent intent = new Intent(LoginActivity.this, SelectTopCategoryActivity.class);
                         intent.putExtra("isRedirect", true);
@@ -91,14 +91,19 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                 },
-                error -> Log.e(TAG, error.toString())
+                error -> {
+
+                    Log.e(TAG, error.toString());
+                    Log.i(TAG, "tellUserWhatWentWrong: " + error.getRecoverySuggestion());
+            //Toast.makeText(getBaseContext(), error.getRecoverySuggestion(), Toast.LENGTH_SHORT).show();
+                }
         );
     }
 
     private String getIDToken() {
         try {
             Token idToken = AWSMobileClient.getInstance().getTokens().getIdToken();
-            Log.d(TAG, "getIDToken: " +  idToken.getTokenString());
+            Log.i(TAG, "getIDToken: " +  idToken.getTokenString());
             return idToken.getTokenString();
         } catch (Exception e) {
             e.printStackTrace();
