@@ -1,14 +1,12 @@
 package de.stuttgart.syzl3000.di
 
 import android.content.Context
-import com.pddstudio.preferences.encrypted.EncryptedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import de.stuttgart.syzl3000.BaseApplication
-import de.stuttgart.syzl3000.services.AuthService
+import de.stuttgart.syzl3000.presentation.ui.BaseApplication
 import javax.inject.Singleton
 
 @Module

@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_graph"
-    app:startDestination="@id/movieListFragment">
+    app:startDestination="@id/recipeListFragment">
 
     <fragment
         android:id="@+id/movieListFragment"
@@ -16,4 +16,18 @@
         android:id="@+id/movieFragment"
         android:name="de.stuttgart.syzl3000.movies.MovieFragment"
         android:label="MovieFragment" />
+
+    <fragment
+        android:id="@+id/recipeListFragment"
+        android:name="de.stuttgart.syzl3000.presentation.ui.recipeList.RecipeListFragment"
+        android:label="RecipeListFragment">
+        <action
+            android:id="@+id/viewRecipe"
+            app:destination="@id/recipeFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/recipeFragment"
+        android:name="de.stuttgart.syzl3000.presentation.ui.recipe.RecipeFragment"
+        android:label="RecipeFragment" />
 </navigation>
