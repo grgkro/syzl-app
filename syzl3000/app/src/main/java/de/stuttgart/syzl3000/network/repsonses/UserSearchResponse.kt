@@ -1,10 +1,9 @@
 package de.stuttgart.syzl3000.network.repsonses
 
 import com.google.gson.annotations.SerializedName
-import de.stuttgart.syzl3000.network.model.MovieNetworkEntity
-import de.stuttgart.syzl3000.network.model.UserNetworkEntity
+import de.stuttgart.syzl3000.network.model.UserDto
 
-class UserSearchResponse(
+data class UserSearchResponse(
         @SerializedName("User")
-        var user: UserNetworkEntity
+        var user: UserDto
 )

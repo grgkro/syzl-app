@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPassword);
         loginBtn = findViewById(R.id.loginBtn);
         encryptedPreferences = new EncryptedPreferences.Builder(this).withEncryptionPassword("MyTestPassword").build();
-        authService = new AuthService();
+        authService = new AuthService(encryptedPreferences);
 
         loginBtn.setOnClickListener(v -> loginBtnClicked());
     }

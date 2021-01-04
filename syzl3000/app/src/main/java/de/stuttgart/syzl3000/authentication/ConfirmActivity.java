@@ -34,7 +34,8 @@ public class ConfirmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_confirm);
         editTextConfirmationCode = findViewById(R.id.editTextConfirmationCode);
         confirmSignUpBtn = findViewById(R.id.confirmBtn);
-        authService = new AuthService();
+        encryptedPreferences = new EncryptedPreferences.Builder(this).withEncryptionPassword("MyTestPassword").build();
+        authService = new AuthService(encryptedPreferences);
 
         confirmSignUpBtn.setOnClickListener(v -> confirmSignUpBtnClicked());
     }
@@ -54,12 +55,11 @@ public class ConfirmActivity extends AppCompatActivity {
     }
 
     private String getEmailFromSharedPreferences() {
-        encryptedPreferences = new EncryptedPreferences.Builder(this).withEncryptionPassword("MyTestPassword").build();
+
         return encryptedPreferences.getString("email", null);
     }
 
     private String getPasswordFromSharedPreferences() {
-        encryptedPreferences = new EncryptedPreferences.Builder(this).withEncryptionPassword("MyTestPassword").build();
         return encryptedPreferences.getString("pw", null);
     }
 

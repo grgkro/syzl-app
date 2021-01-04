@@ -41,18 +41,18 @@ class MovieListActivity : AppCompatActivity() {
                 .build()
                 .create(UserService::class.java)
 
-        CoroutineScope(IO).launch {
-            val response = service.get(
-                token = "eyJraWQiOiJlK1wvdzFUN0t2QVVjMEtKRnhvNWYxRU9xWkdpazRETGd4MmlVNE5GY3NBaz0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIyYjBlNzdlNS0zMDg1LTRlNmUtYTgzMi1iZjYxYTZiY2Q1OGQiLCJhdWQiOiIzNTltNWFkdTN0MWMxYjJ1MjAxZ2FnM3U2YSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJldmVudF9pZCI6ImE4YzVkZDc4LTA4OTYtNDgwMS1iNmIwLTY2MGFlMTVhM2NhZSIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNjA5NzAxMzAwLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuZXUtY2VudHJhbC0xLmFtYXpvbmF3cy5jb21cL2V1LWNlbnRyYWwtMV9xMHpTSFZTbFoiLCJjb2duaXRvOnVzZXJuYW1lIjoiMmIwZTc3ZTUtMzA4NS00ZTZlLWE4MzItYmY2MWE2YmNkNThkIiwiZXhwIjoxNjA5NzA0OTAwLCJpYXQiOjE2MDk3MDEzMDAsImVtYWlsIjoiZ3IuZ2tyb0BnbWFpbC5jb20ifQ.J4_S6WPaHVJiQrG-hrMfZzdfplDpBl47Rwtp1uJ0rt-Y4PV-kXyRFXGyxLJ1NyP1Oc2ZsaYRw9y0qx_QHOYhhIwI1T9U8LgU50l3F5KAhgoHnQfMiZcfvVMw8LvWocAe0D8G7EqpcUoSTI6KG3oZnYC0pKIbJDrYYRrUMBN3r-Lz8ZYYcQlv6k9zgcDedXxHPyf36KyJdNmvrgI_st7eycBbg-noDgZKtbAy9Mt6rR3FcASpNZ5WwTxpwp45777nsIm32dDYUR05FN8CqSHrkUjbkopGYlS9JJs06I7ZxGin1wPGN7T9D0MF-w_2wFOuKhL_pBdCOyqFzdJmOZSHpw",
-                id = "2b0e77e5-3085-4e6e-a832-bf61a6bcd58d"
-            )
-            Log.i("my response", "onResponse: ${response}")
-            Log.i("my response", "onResponse: ${response.user}")
-            Log.i("my response", "onResponse: ${response.user.username}")
-            Log.i("my response", "onResponse: TEEEST")
-            Log.i("my response", "onResponse: ${response.user.id}")
-            Log.i("my response", "onResponse: ${response.user.email}")
-            Log.i("my response", "onResponse: ${response.user.picture}")
-        }
+//        CoroutineScope(IO).launch {
+//            val response = service.get(
+//                token = "eyJraWQiOiJlK1wvdzFUN0t2QVVjMEtKRnhvNWYxRU9xWkdpazRETGd4MmlVNE5GY3NBaz0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIyYjBlNzdlNS0zMDg1LTRlNmUtYTgzMi1iZjYxYTZiY2Q1OGQiLCJhdWQiOiIzNTltNWFkdTN0MWMxYjJ1MjAxZ2FnM3U2YSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJldmVudF9pZCI6ImE4YzVkZDc4LTA4OTYtNDgwMS1iNmIwLTY2MGFlMTVhM2NhZSIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNjA5NzAxMzAwLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuZXUtY2VudHJhbC0xLmFtYXpvbmF3cy5jb21cL2V1LWNlbnRyYWwtMV9xMHpTSFZTbFoiLCJjb2duaXRvOnVzZXJuYW1lIjoiMmIwZTc3ZTUtMzA4NS00ZTZlLWE4MzItYmY2MWE2YmNkNThkIiwiZXhwIjoxNjA5NzA0OTAwLCJpYXQiOjE2MDk3MDEzMDAsImVtYWlsIjoiZ3IuZ2tyb0BnbWFpbC5jb20ifQ.J4_S6WPaHVJiQrG-hrMfZzdfplDpBl47Rwtp1uJ0rt-Y4PV-kXyRFXGyxLJ1NyP1Oc2ZsaYRw9y0qx_QHOYhhIwI1T9U8LgU50l3F5KAhgoHnQfMiZcfvVMw8LvWocAe0D8G7EqpcUoSTI6KG3oZnYC0pKIbJDrYYRrUMBN3r-Lz8ZYYcQlv6k9zgcDedXxHPyf36KyJdNmvrgI_st7eycBbg-noDgZKtbAy9Mt6rR3FcASpNZ5WwTxpwp45777nsIm32dDYUR05FN8CqSHrkUjbkopGYlS9JJs06I7ZxGin1wPGN7T9D0MF-w_2wFOuKhL_pBdCOyqFzdJmOZSHpw",
+//                id = "2b0e77e5-3085-4e6e-a832-bf61a6bcd58d"
+//            )
+//            Log.i("my response", "onResponse: ${response}")
+//            Log.i("my response", "onResponse: ${response.user}")
+//            Log.i("my response", "onResponse: ${response.user.username}")
+//            Log.i("my response", "onResponse: TEEEST")
+//            Log.i("my response", "onResponse: ${response.user.id}")
+//            Log.i("my response", "onResponse: ${response.user.email}")
+//            Log.i("my response", "onResponse: ${response.user.picture}")
+//        }
     }
 }

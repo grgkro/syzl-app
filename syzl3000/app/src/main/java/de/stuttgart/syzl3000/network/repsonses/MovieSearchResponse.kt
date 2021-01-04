@@ -1,12 +1,12 @@
 package de.stuttgart.syzl3000.network.repsonses
 
 import com.google.gson.annotations.SerializedName
-import de.stuttgart.syzl3000.network.model.MovieNetworkEntity
+import de.stuttgart.syzl3000.network.model.MovieDto
 
-class MovieSearchResponse (
+data class MovieSearchResponse (
         @SerializedName("count")
         var count: Int,
 @SerializedName("results")
-        var movies: List<MovieNetworkEntity>
+        var movies: List<MovieDto>
         ) {
 }

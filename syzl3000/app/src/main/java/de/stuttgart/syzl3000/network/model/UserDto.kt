@@ -1,6 +1,6 @@
 package de.stuttgart.syzl3000.network.model
 
-class UserNetworkEntity(
+data class UserDto(
         var id: String? = null,
         var gangs: List<String>? = null,
         var username: String? = null,

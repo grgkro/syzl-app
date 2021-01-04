@@ -2,7 +2,7 @@ package de.stuttgart.syzl3000.network.model
 
 import com.google.gson.annotations.SerializedName
 
-class MovieNetworkEntity(
+data class MovieDto(
 
 //        @SerializedName("id")
         var id: String? = null,

@@ -17,14 +17,21 @@ import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
 import com.pddstudio.preferences.encrypted.EncryptedPreferences;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 import de.stuttgart.syzl3000.CircleListActivity;
 import de.stuttgart.syzl3000.R;
 import de.stuttgart.syzl3000.SelectTopCategoryActivity;
 import de.stuttgart.syzl3000.services.AuthService;
 
+@AndroidEntryPoint
 public class SignUpActivity extends AppCompatActivity {
 
     private final String TAG = SignUpActivity.class.getSimpleName();
+
+    @Inject
+    String someRandomString;
 
     private EditText editTextEmail;
     private EditText editTextPassword;
@@ -49,8 +56,10 @@ public class SignUpActivity extends AppCompatActivity {
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
         signUpBtn = findViewById(R.id.signUpBtn);
-        authService = new AuthService();
+        encryptedPreferences = new EncryptedPreferences.Builder(this).withEncryptionPassword("MyTestPassword").build();
+        authService = new AuthService(encryptedPreferences);
 
+        Log.i(TAG, "onCreate testing Hilt: " + someRandomString);
         if (!getIntent().getBooleanExtra("isRedirect", false)) {
             setUpAmplifyWithAuth();
         }
@@ -61,19 +70,18 @@ public class SignUpActivity extends AppCompatActivity {
 
 
 
-            Amplify.Auth.signOut(
-                    () -> {
-                        Log.i("AuthQuickstart", "Signed out successfully");
-                    },
-                    error -> Log.e(TAG, error.toString())
-            );
+//            Amplify.Auth.signOut(
+//                    () -> {
+//                        Log.i("AuthQuickstart", "Signed out successfully");
+//                    },
+//                    error -> Log.e(TAG, error.toString())
+//            );
 
 
         signUpBtn.setOnClickListener(v -> signUpBtnClicked());
     }
 
     private void getCredentialsFromSharedPreferences() {
-        encryptedPreferences = new EncryptedPreferences.Builder(this).withEncryptionPassword("MyTestPassword").build();
         email = encryptedPreferences.getString("email", null);
         password = encryptedPreferences.getString("pw", null);
     }
