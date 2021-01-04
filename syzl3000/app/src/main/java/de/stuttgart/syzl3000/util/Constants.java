@@ -6,6 +6,8 @@ public class Constants {
     public static final String BRUDDAAL_BASE_URL ="https://8o4qoqjrj7.execute-api.eu-central-1.amazonaws.com/dev/";
     public static final int NETWORK_TIMEOUT = 3000;
 
+    public static final String TAG = "AppDebug";
+
 
     public static final String[] DEFAULT_SEARCH_CATEGORIES =
             {"Vegetarian", "Vegan", "Chicken", "Beef", "Pork", "Dinner", "Breakfast", "Brunch", "Wine", "Italian", "French", "Greek", "Thai", "Chinese" };
