@@ -3,11 +3,14 @@ package de.stuttgart.syzl3000.authentication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -51,6 +54,17 @@ public class ConfirmFragment extends Fragment {
         Log.i(TAG, "onStart: ConfirmFragment started");
 
         editTextConfirmationCode.requestFocus();
+        editTextConfirmationCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    confirmSignUpBtnClicked();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
 
         confirmSignUpBtn.setOnClickListener(v -> confirmSignUpBtnClicked());
     }

@@ -13,7 +13,6 @@
     android:background="@drawable/gradient"
     tools:context=".authentication.SignUpFragment">
 
-
     <TextView
         android:id="@+id/confirmTextView"
         android:layout_width="wrap_content"
@@ -62,8 +61,9 @@
         android:layout_width="244dp"
         android:layout_height="wrap_content"
         android:hint="Email"
-        android:imeOptions="actionDone|actionNext"
+        android:imeOptions="actionNext"
         android:inputType="textEmailAddress"
+        android:maxLines="1"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -93,7 +93,8 @@
         android:layout_height="wrap_content"
         android:hint="Password"
         android:imeOptions="actionSend"
-        android:inputType="text"
+        android:inputType="textPassword"
+        android:maxLines="1"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/textViewPassword"

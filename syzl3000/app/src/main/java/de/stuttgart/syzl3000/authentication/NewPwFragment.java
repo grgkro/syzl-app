@@ -3,9 +3,11 @@ package de.stuttgart.syzl3000.authentication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -50,6 +52,20 @@ private String email;
         helpTextView = getView().findViewById(R.id.helpTextView);
         encryptedPreferences = new EncryptedPreferences.Builder(getActivity()).withEncryptionPassword("MyTestPassword").build();
         email = encryptedPreferences.getString("email", null);
+        Log.i(TAG, "onStart: email from sharedPreferences is: " + email);
+
+        editTextCode.requestFocus();
+        editTextPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    changePwBtnClicked();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
 
         changePwBtn.setOnClickListener(v -> changePwBtnClicked());
         newAccountTextView.setOnClickListener(v -> {

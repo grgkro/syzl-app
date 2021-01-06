@@ -8,11 +8,6 @@
     android:background="@drawable/gradient"
     tools:context=".authentication.AuthenticationActivity">
 
-<!--    <fragment-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:name="de.stuttgart.syzl3000.authentication.ConfirmFragment" />-->
-
     <androidx.fragment.app.FragmentContainerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
