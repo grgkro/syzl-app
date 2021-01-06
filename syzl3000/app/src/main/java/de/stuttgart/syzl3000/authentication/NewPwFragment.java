@@ -45,7 +45,7 @@ private String email;
         super.onStart();
         editTextCode = getView().findViewById(R.id.editTextCode);
         editTextPassword = getView().findViewById(R.id.editTextPassword);
-        changePwBtn = getView().findViewById(R.id.resetPwBtn);
+        changePwBtn = getView().findViewById(R.id.changePwBtn);
         newAccountTextView = getView().findViewById(R.id.newAccountTextView);
         helpTextView = getView().findViewById(R.id.helpTextView);
         encryptedPreferences = new EncryptedPreferences.Builder(getActivity()).withEncryptionPassword("MyTestPassword").build();
