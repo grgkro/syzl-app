@@ -19,6 +19,15 @@ public class AuthService {
     private static String email;
     private static String password;
     private EncryptedPreferences encryptedPreferences;
+    private boolean isAmplifyConfiguered;
+
+    public boolean isAmplifyConfiguered() {
+        return isAmplifyConfiguered;
+    }
+
+    public void setAmplifyConfiguered(boolean amplifyConfiguered) {
+        isAmplifyConfiguered = amplifyConfiguered;
+    }
 
     public AuthService(EncryptedPreferences encryptedPreferences) {
         this.encryptedPreferences = encryptedPreferences;

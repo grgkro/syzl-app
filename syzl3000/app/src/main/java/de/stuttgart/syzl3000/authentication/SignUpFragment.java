@@ -47,6 +47,7 @@ public class SignUpFragment extends Fragment {
     private static String email;
     private static String password;
     private EncryptedPreferences encryptedPreferences;
+    private boolean wasFramgmentNotCalledYet;
 
     public static String getEmail() {
         return email;
@@ -75,20 +76,9 @@ public class SignUpFragment extends Fragment {
         authService = new AuthService(encryptedPreferences);
 
         editTextEmail.requestFocus();
-        editTextPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    signUpBtnClicked();
-                    handled = true;
-                }
-                return handled;
-            }
-        });
 
         Log.i(TAG, "onCreate testing Hilt: " + "someRandomString");
-        if (!getActivity().getIntent().getBooleanExtra("isRedirect", false)) {
+        if (authService.isAmplifyConfiguered()) {
             setUpAmplifyWithAuth();
         }
 
@@ -142,6 +132,7 @@ public class SignUpFragment extends Fragment {
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Log.d(TAG, "onCreate: plugin Auth added");
             Amplify.configure(getActivity().getApplicationContext());
+            authService.setAmplifyConfiguered(true);
             Log.i(TAG, "Initialized Amplify");
         } catch (AmplifyException error) {
             Log.e(TAG, "Could not initialize Amplify.", error);
@@ -167,13 +158,22 @@ public class SignUpFragment extends Fragment {
     }
 
     private void signUp(String email, String password) {
+
         Amplify.Auth.signUp(
                 email,
                 password,
                 AuthSignUpOptions.builder().userAttribute(AuthUserAttributeKey.email(), email).build(),
                 result -> {
-                    Log.i(TAG, "SIGN UP Result: " + result.toString());
-                    Navigation.findNavController(getActivity(), R.id.main_nav_host_fragment).navigate(R.id.viewConfirm);
+                    Log.i(TAG, "SignUp result: " + result.toString());
+
+                        getActivity().runOnUiThread(new Runnable(){
+                            @Override
+                            public void run(){
+                                Navigation.findNavController(getActivity(), R.id.main_nav_host_fragment).navigate(R.id.viewConfirm);
+                            }
+                        });
+
+
 //                    startTheNextActivity(ConfirmActivity.class);
                 },
                 error -> {
@@ -181,30 +181,31 @@ public class SignUpFragment extends Fragment {
                     tellUserWhatWentWrong(error.getCause().toString());
                 }
         );
+
     }
 
     private void tellUserWhatWentWrong(String cause) {
         if (isUsernameEmpty(cause)) {
             Log.d(TAG, "tellUserWhatWentWrong: USERNAME WAS EMPTY");
-//            Toast.makeText(getBaseContext(), "USERNAME WAS EMPTY", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "USERNAME WAS EMPTY", Toast.LENGTH_SHORT).show();
         } else if (isUsernameWrong(cause)) {
             Log.d(TAG, "tellUserWhatWentWrong: USERNAME was wrong");
-//            Toast.makeText(getBaseContext(), "USERNAME was wrong", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "USERNAME was wrong", Toast.LENGTH_SHORT).show();
         } else if (isEmailInvalid(cause)) {
             Log.d(TAG, "tellUserWhatWentWrong: Invalid email address");
-//            Toast.makeText(getBaseContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "Invalid email address", Toast.LENGTH_SHORT).show();
         } else if (isAlreadySignedUp(cause)) {
             Log.d(TAG, "tellUserWhatWentWrong: The given email already exists");
-//            Toast.makeText(getBaseContext(), "The given email already exists", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "The given email already exists", Toast.LENGTH_SHORT).show();
         } else if (isPasswordTooShort(cause)) {
             Log.d(TAG, "tellUserWhatWentWrong: Password was to short");
-//            Toast.makeText(getBaseContext(), "Password was to short", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "Password was to short", Toast.LENGTH_SHORT).show();
         } else if (isPasswordWrong(cause)) {
             Log.d(TAG, "tellUserWhatWentWrong: Password was wrong");
-//            Toast.makeText(getBaseContext(), "Password was wrong", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "Password was wrong", Toast.LENGTH_SHORT).show();
         } else {
             Log.d(TAG, "tellUserWhatWentWrong: Sign up failed due to unknown reasons");
-//            Toast.makeText(getBaseContext(), "Sign up failed due to unknown reasons", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "Sign up failed due to unknown reasons", Toast.LENGTH_SHORT).show();
         }
     }
 
