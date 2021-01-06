@@ -19,9 +19,8 @@
         android:textStyle="bold"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.165"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editTextEmail"
+        app:layout_constraintStart_toStartOf="@+id/editTextEmail"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.042" />
 
@@ -37,10 +36,11 @@
         android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="@+id/editTextPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.067"
-        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/signUpBtn"
         app:layout_constraintTop_toBottomOf="@+id/textViewEmail"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/confirmTextView"
@@ -53,42 +53,40 @@
         android:textColor="#fefefe"
         android:textSize="28dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.037"
+        app:layout_constraintBottom_toTopOf="@id/checkBox"
+        app:layout_constraintEnd_toEndOf="@id/signUpBtn"
+        app:layout_constraintHorizontal_bias="0.177"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.952" />
+        app:layout_constraintTop_toBottomOf="@id/editTextPassword" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="154dp"
-        android:layout_height="84dp"
+        android:layout_width="208dp"
+        android:layout_height="96dp"
         android:contentDescription="TODO"
-        android:src="@drawable/logo"
+        android:src="@drawable/logo_no_slogan4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.499"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.048" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/editTextPassword"
         android:layout_width="250dp"
         android:layout_height="70dp"
-        android:layout_marginEnd="20dp"
         android:hint="Password"
         android:imeOptions="actionSend"
         android:inputType="text"
         android:maxLines="1"
         android:textColor="#FFFFFF"
+
         android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/textViewPassword"
-        app:layout_constraintTop_toBottomOf="@+id/textViewPassword"
+        app:layout_constraintEnd_toEndOf="@id/signUpBtn"
+        app:layout_constraintHorizontal_bias="0.997"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewEmail"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -99,13 +97,11 @@
         android:textColor="#fefefe"
         android:textSize="25dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.825"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textViewEmail"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintBottom_toTopOf="@+id/editTextPassword"
+        app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
+        app:layout_constraintStart_toStartOf="@+id/editTextPassword"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/loginTextView"
@@ -117,27 +113,42 @@
         android:textColor="#fefefe"
         android:textSize="28dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.962"
+        app:layout_constraintBottom_toTopOf="@id/checkBox"
+        app:layout_constraintEnd_toEndOf="@id/signUpBtn"
+        app:layout_constraintHorizontal_bias="0.997"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.952" />
+        app:layout_constraintTop_toBottomOf="@id/editTextPassword"
+         />
 
     <CheckBox
         android:id="@+id/checkBox"
-        android:layout_width="match_parent"
+        android:layout_width="600dp"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="Agree on terms and conditions"
+        android:gravity="center_horizontal|center_vertical"
         android:textColor="#fefefe"
         android:textSize="30dp"
         app:layout_constraintBottom_toTopOf="@+id/signUpBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
-        app:layout_constraintVertical_bias="0.535" />
+        app:layout_constraintVertical_bias="0.876" />
+
+    <TextView
+        android:id="@+id/checkBoxTextView"
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="Agree on our terms and conditions"
+        android:textColor="#fefefe"
+        android:textSize="28dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/checkBox"
+        app:layout_constraintEnd_toEndOf="@+id/checkBox"
+        app:layout_constraintStart_toStartOf="@+id/checkBox"
+        app:layout_constraintTop_toTopOf="@+id/checkBox" />
 
     <Button
         android:id="@+id/signUpBtn"
@@ -149,10 +160,10 @@
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.644" />
+        app:layout_constraintVertical_bias="0.95" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

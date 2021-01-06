@@ -75,7 +75,6 @@ public class ProfileActivity extends AppCompatActivity {
                 client.usersDelete(userAttributeList.get(0).getValue());
                 result = "Successfully deleted account " + userAttributeList.get(2).getValue();
                 Intent intent = new Intent(ProfileActivity.this, AuthenticationActivity.class);
-                intent.putExtra("isRedirect", true);
                 startActivity(intent);
                 return null;
             } catch (Exception e) {
