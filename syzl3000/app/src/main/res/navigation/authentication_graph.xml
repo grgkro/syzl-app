@@ -11,7 +11,9 @@
         <action
             android:id="@+id/viewConfirm"
             app:destination="@id/confirmFragment" />
-
+        <action
+            android:id="@+id/viewLogin"
+            app:destination="@id/loginFragment" />
     </fragment>
 
     <fragment
@@ -19,6 +21,9 @@
         android:name="de.stuttgart.syzl3000.authentication.ConfirmFragment"
         android:label="ConfirmFragment" />
 
-
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="de.stuttgart.syzl3000.authentication.LoginFragment"
+        android:label="LoginFragment" />
 
 </navigation>

@@ -71,6 +71,9 @@ public class SignUpFragment extends Fragment {
         super.onStart();
         editTextEmail = getView().findViewById(R.id.editTextEmail);
         editTextPassword = getView().findViewById(R.id.editTextPassword);
+        TextView loginTextView = getView().findViewById(R.id.loginTextView);
+        TextView confirmTextView = getView().findViewById(R.id.confirmTextView);
+
         signUpBtn = getView().findViewById(R.id.signUpBtn);
         encryptedPreferences = new EncryptedPreferences.Builder(getActivity()).withEncryptionPassword("MyTestPassword").build();
         authService = new AuthService(encryptedPreferences);
@@ -97,7 +100,14 @@ public class SignUpFragment extends Fragment {
 
 
         signUpBtn.setOnClickListener(v -> signUpBtnClicked());
-
+        loginTextView.setOnClickListener(v -> {
+            Log.i(TAG, "Starting Login Fragment");
+            Navigation.findNavController(getActivity(), R.id.main_nav_host_fragment).navigate(R.id.viewLogin);
+        });
+        confirmTextView.setOnClickListener(v -> {
+            Log.i(TAG, "Starting Confirm Fragment");
+            Navigation.findNavController(getActivity(), R.id.main_nav_host_fragment).navigate(R.id.viewConfirm);
+        });
     }
 
     private void getCredentialsFromSharedPreferences() {
@@ -263,7 +273,7 @@ public class SignUpFragment extends Fragment {
         SignUpFragment.this.startActivity(i);
     }
 
-    public void startConfirmActivity(View view) {
+    public void startConfirmActivityFromSignUp(View view) {
         Log.i(TAG, "Starting Confirm Activity");
         Intent i = new Intent(getActivity(), ConfirmActivity.class);
         SignUpFragment.this.startActivity(i);
