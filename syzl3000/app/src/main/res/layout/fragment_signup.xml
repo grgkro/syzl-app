@@ -62,6 +62,7 @@
         android:layout_width="244dp"
         android:layout_height="wrap_content"
         android:hint="Email"
+        android:imeOptions="actionDone|actionNext"
         android:inputType="textEmailAddress"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"

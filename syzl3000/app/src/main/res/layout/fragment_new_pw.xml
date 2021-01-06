@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:fillViewport="true">-->
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_login"
+    android:id="@+id/fragment_NewPw"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient"
-    tools:context=".authentication.LoginFragment">
+    tools:context=".authentication.NewPwFragment">
 
 
     <TextView
-        android:id="@+id/forgotPwTextView"
+        android:id="@+id/helpTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:text="Forgot Password"
+        android:focusable="true"
+        android:text="Didn't receive a reset code per email?"
         android:textColor="#fefefe"
         android:textSize="20dp"
         android:textStyle="bold"
@@ -22,12 +27,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.955" />
+        app:layout_constraintVertical_bias="0.964" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="376dp"
         android:layout_height="147dp"
+        android:contentDescription="TODO"
         android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,10 +42,10 @@
         app:layout_constraintVertical_bias="0.115" />
 
     <TextView
-        android:id="@+id/textViewEmail"
+        android:id="@+id/textViewCode"
         android:layout_width="244dp"
         android:layout_height="wrap_content"
-        android:text="Email"
+        android:text="Reset Code"
         android:textColor="#fefefe"
         android:textSize="20dp"
         android:textStyle="bold"
@@ -52,16 +58,17 @@
         app:layout_constraintVertical_bias="0.392" />
 
     <EditText
-        android:id="@+id/editTextEmail"
+        android:id="@+id/editTextCode"
         android:layout_width="244dp"
         android:layout_height="wrap_content"
-        android:hint="Email"
+        android:hint="Code"
+        android:inputType="numberSigned"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHorizontal_bias="0.467"
-        app:layout_constraintTop_toBottomOf="@+id/textViewEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCode"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -75,8 +82,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/textViewEmail"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
+        app:layout_constraintStart_toStartOf="@+id/textViewCode"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCode"
         app:layout_constraintVertical_bias="0.078" />
 
     <EditText
@@ -84,20 +91,22 @@
         android:layout_width="244dp"
         android:layout_height="wrap_content"
         android:hint="Password"
+        android:imeOptions="actionSend"
+        android:inputType="text"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/textViewPassword"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextEmail"
+        app:layout_constraintStart_toStartOf="@+id/editTextCode"
         app:layout_constraintTop_toBottomOf="@+id/textViewPassword"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/loginBtn"
+        android:id="@+id/changePwBtn"
         android:layout_width="414dp"
         android:layout_height="85dp"
         android:background="#FFA000"
-        android:text="Login"
+        android:text="Change Password"
         android:textColor="#fefefe"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -108,10 +117,10 @@
         app:layout_constraintVertical_bias="0.783" />
 
     <TextView
-        android:id="@+id/newAccountTextView"
+        android:id="@+id/loginTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
+        android:focusable="true"
         android:text="Create new account"
         android:textColor="#fefefe"
         android:textSize="20dp"
@@ -124,3 +133,5 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--</ScrollView>-->

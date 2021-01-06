@@ -81,7 +81,7 @@ public class SignUpFragment extends Fragment {
         editTextEmail.requestFocus();
 
         Log.i(TAG, "onCreate testing Hilt: " + "someRandomString");
-        if (authService.isAmplifyConfiguered()) {
+        if (!authService.isAmplifyConfiguered()) {
             setUpAmplifyWithAuth();
         }
 
@@ -152,7 +152,7 @@ public class SignUpFragment extends Fragment {
     private void signUpBtnClicked() {
         email = editTextEmail.getText().toString();
         password = editTextPassword.getText().toString();
-        if (authService.isEmailValid(email)) {
+        if (email != null && authService.isEmailValid(email)) {
             saveEncryptedSharedPreferences(email, password);
             signUp(email, password);
         } else {

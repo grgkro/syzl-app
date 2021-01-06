@@ -23,67 +23,62 @@ import de.stuttgart.syzl3000.R;
 import de.stuttgart.syzl3000.SelectTopCategoryActivity;
 import de.stuttgart.syzl3000.services.AuthService;
 
-public class LoginFragment extends Fragment {
+public class NewPwFragment extends Fragment {
 
-    private final String TAG = LoginFragment.class.getSimpleName();
+    private final String TAG = NewPwFragment.class.getSimpleName();
 
-    private EditText editTextEmail;
+    private EditText editTextCode;
     private EditText editTextPassword;
-    private Button loginBtn;
+    private Button changePwBtn;
     private TextView newAccountTextView;
-    private TextView forgotPwTextView;
-    private static String email;
-    private static String password;
-    private AuthService authService;
+    private TextView helpTextView;
     private EncryptedPreferences encryptedPreferences;
-
-    public static String getEmail() {
-        return email;
-    }
-    public static String getPassword() {
-        return password;
-    }
+private String email;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        return inflater.inflate(R.layout.fragment_new_pw, container, false);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        editTextEmail = getView().findViewById(R.id.editTextEmail);
+        editTextCode = getView().findViewById(R.id.editTextCode);
         editTextPassword = getView().findViewById(R.id.editTextPassword);
-        loginBtn = getView().findViewById(R.id.loginBtn);
+        changePwBtn = getView().findViewById(R.id.resetPwBtn);
         newAccountTextView = getView().findViewById(R.id.newAccountTextView);
-        forgotPwTextView = getView().findViewById(R.id.forgotPwTextView);
+        helpTextView = getView().findViewById(R.id.helpTextView);
         encryptedPreferences = new EncryptedPreferences.Builder(getActivity()).withEncryptionPassword("MyTestPassword").build();
-        authService = new AuthService(encryptedPreferences);
+        email = encryptedPreferences.getString("email", null);
 
-        loginBtn.setOnClickListener(v -> loginBtnClicked());
+        changePwBtn.setOnClickListener(v -> changePwBtnClicked());
         newAccountTextView.setOnClickListener(v -> {
             Log.i(TAG, "Starting SignUp Fragment");
             Navigation.findNavController(getActivity(), R.id.main_nav_host_fragment).navigate(R.id.viewSignUp);
         });
-        forgotPwTextView.setOnClickListener(v -> {
-            Log.i(TAG, "Starting ForgotPassword Fragment");
-            Navigation.findNavController(getActivity(), R.id.main_nav_host_fragment).navigate(R.id.viewForgotPw);
+        helpTextView.setOnClickListener(v -> {
+            Log.i(TAG, "helpTextView clicked");
+            Toast.makeText(getActivity(), "We sent a request code to " + email + ". Please wait a few minutes and check your Spam folder.", Toast.LENGTH_LONG).show();
         });
+
     }
 
-    private void loginBtnClicked() {
-        String email = editTextEmail.getText().toString();
+    private void changePwBtnClicked() {
+        String code = editTextCode.getText().toString();
         String password = editTextPassword.getText().toString();
-        if (email != null && authService.isEmailValid(email)) {
-            encryptedPreferences.edit()
-                    .putString("email", email)
-                    .putString("pw", password)
-                    .apply();
-            login(email, password);
-        } else {
-            Toast.makeText(getActivity(), "Invalid email address", Toast.LENGTH_SHORT).show();
-        }
-
+        Amplify.Auth.confirmResetPassword(
+                password,
+                code,
+                () -> {
+                    Log.i("AuthQuickstart", "New password confirmed");
+                    Toast.makeText(getActivity(), "New password confirmed", Toast.LENGTH_SHORT).show();
+                    login(email, password);
+                },
+                error -> {
+                    Log.e("AuthQuickstart", error.toString());
+                            Toast.makeText(getActivity(), error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                }
+        );
     }
 
     private void login(String email, String password) {
@@ -99,7 +94,7 @@ public class LoginFragment extends Fragment {
                         saveEncryptedSharedPreferences(email, password, idToken);
                         Intent intent = new Intent(getActivity(), SelectTopCategoryActivity.class);
                         intent.putExtra("isRedirect", true);
-                        LoginFragment.this.startActivity(intent);
+                        NewPwFragment.this.startActivity(intent);
                     } else {
                         Log.i(TAG,  "Sign in not complete");
                     }
