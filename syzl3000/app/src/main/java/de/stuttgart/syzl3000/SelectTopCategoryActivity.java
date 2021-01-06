@@ -28,6 +28,7 @@ import de.stuttgart.syzl3000.R;
 import de.stuttgart.syzl3000.SwipeActivity;
 import de.stuttgart.syzl3000.adapters.RecipeRecyclerAdapter;
 import de.stuttgart.syzl3000.models.Recipe;
+import de.stuttgart.syzl3000.movies.MovieListActivity;
 import de.stuttgart.syzl3000.util.Testing;
 import de.stuttgart.syzl3000.util.VerticalSpacingItemDecorator;
 import de.stuttgart.syzl3000.viewmodels.RecipeListViewModel;
@@ -57,8 +58,8 @@ public class SelectTopCategoryActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: movies not implemented yet");
-                //Intent intent = new Intent(SelectTopCategoryActivity.this, MovieListActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(SelectTopCategoryActivity.this, MovieListActivity.class);
+                startActivity(intent);
             }
         });
     }
