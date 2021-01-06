@@ -33,7 +33,7 @@ import de.stuttgart.syzl3000.LambdaSimpleProxyClient;
 import de.stuttgart.syzl3000.R;
 import de.stuttgart.syzl3000.RecipeListActivity;
 import de.stuttgart.syzl3000.SelectTopCategoryActivity;
-import de.stuttgart.syzl3000.authentication.SignUpActivity;
+import de.stuttgart.syzl3000.authentication.AuthenticationActivity;
 import de.stuttgart.syzl3000.services.AuthService;;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -74,7 +74,7 @@ public class ProfileActivity extends AppCompatActivity {
                 final LambdaSimpleProxyClient client = factory.build(LambdaSimpleProxyClient.class);
                 client.usersDelete(userAttributeList.get(0).getValue());
                 result = "Successfully deleted account " + userAttributeList.get(2).getValue();
-                Intent intent = new Intent(ProfileActivity.this, SignUpActivity.class);
+                Intent intent = new Intent(ProfileActivity.this, AuthenticationActivity.class);
                 intent.putExtra("isRedirect", true);
                 startActivity(intent);
                 return null;

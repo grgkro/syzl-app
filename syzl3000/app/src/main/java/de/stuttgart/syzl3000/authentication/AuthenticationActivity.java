@@ -1,27 +1,20 @@
 package de.stuttgart.syzl3000.authentication;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.amazonaws.mobile.client.AWSMobileClient;
-import com.amazonaws.mobile.client.results.Token;
-import com.amplifyframework.core.Amplify;
 import com.pddstudio.preferences.encrypted.EncryptedPreferences;
 
 import de.stuttgart.syzl3000.R;
-import de.stuttgart.syzl3000.SelectTopCategoryActivity;
 import de.stuttgart.syzl3000.services.AuthService;
 
-public class ConfirmActivity extends AppCompatActivity {
+public class AuthenticationActivity extends AppCompatActivity {
 
-    private final String TAG = ConfirmActivity.class.getSimpleName();
+    private final String TAG = AuthenticationActivity.class.getSimpleName();
 
     private EditText editTextConfirmationCode;
     private Button confirmSignUpBtn;
@@ -30,6 +23,7 @@ public class ConfirmActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
 //        editTextConfirmationCode = findViewById(R.id.editTextConfirmationCode);

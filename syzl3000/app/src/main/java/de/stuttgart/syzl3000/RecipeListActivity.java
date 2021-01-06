@@ -24,7 +24,7 @@ import java.util.List;
 
 import de.stuttgart.syzl3000.adapters.OnRecipeListener;
 import de.stuttgart.syzl3000.adapters.RecipeRecyclerAdapter;
-import de.stuttgart.syzl3000.authentication.SignUpActivity;
+import de.stuttgart.syzl3000.authentication.AuthenticationActivity;
 import de.stuttgart.syzl3000.menu.ProfileActivity;
 import de.stuttgart.syzl3000.models.Recipe;
 import de.stuttgart.syzl3000.util.Testing;
@@ -212,7 +212,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
 
     public void startAuthenticationActivity() {
         Log.i(TAG, "Starting Authentication Activity");
-        Intent i = new Intent(RecipeListActivity.this, SignUpActivity.class);
+        Intent i = new Intent(RecipeListActivity.this, AuthenticationActivity.class);
         RecipeListActivity.this.startActivity(i);
     }
 }

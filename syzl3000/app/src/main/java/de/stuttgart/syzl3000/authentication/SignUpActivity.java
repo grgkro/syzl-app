@@ -23,7 +23,6 @@ import com.pddstudio.preferences.encrypted.EncryptedPreferences;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
-import de.stuttgart.syzl3000.CircleListActivity;
 import de.stuttgart.syzl3000.R;
 import de.stuttgart.syzl3000.SelectTopCategoryActivity;
 import de.stuttgart.syzl3000.services.AuthService;
@@ -161,7 +160,7 @@ public class SignUpActivity extends AppCompatActivity {
                 AuthSignUpOptions.builder().userAttribute(AuthUserAttributeKey.email(), email).build(),
                 result -> {
                     Log.i(TAG, "SIGN UP Result: " + result.toString());
-                    startTheNextActivity(ConfirmActivity.class);
+                    startTheNextActivity(AuthenticationActivity.class);
                 },
                 error -> {
                     Log.e(TAG, "signUp Error: ", error);
@@ -251,7 +250,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     public void startConfirmActivity(View view) {
         Log.i(TAG, "Starting Confirm Activity");
-        Intent i = new Intent(SignUpActivity.this, ConfirmActivity.class);
+        Intent i = new Intent(SignUpActivity.this, AuthenticationActivity.class);
         SignUpActivity.this.startActivity(i);
     }
 }

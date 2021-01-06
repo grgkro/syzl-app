@@ -3,17 +3,14 @@ package de.stuttgart.syzl3000.authentication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -24,9 +21,6 @@ import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
 import com.pddstudio.preferences.encrypted.EncryptedPreferences;
 
-import javax.inject.Inject;
-
-import dagger.hilt.android.AndroidEntryPoint;
 import de.stuttgart.syzl3000.R;
 import de.stuttgart.syzl3000.SelectTopCategoryActivity;
 import de.stuttgart.syzl3000.services.AuthService;
@@ -275,7 +269,7 @@ public class SignUpFragment extends Fragment {
 
     public void startConfirmActivityFromSignUp(View view) {
         Log.i(TAG, "Starting Confirm Activity");
-        Intent i = new Intent(getActivity(), ConfirmActivity.class);
+        Intent i = new Intent(getActivity(), AuthenticationActivity.class);
         SignUpFragment.this.startActivity(i);
     }
 }
