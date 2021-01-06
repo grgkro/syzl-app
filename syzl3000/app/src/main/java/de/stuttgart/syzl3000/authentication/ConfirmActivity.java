@@ -31,7 +31,7 @@ public class ConfirmActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_confirm);
+        setContentView(R.layout.activity_authentication);
 //        editTextConfirmationCode = findViewById(R.id.editTextConfirmationCode);
 //        confirmSignUpBtn = findViewById(R.id.confirmBtn);
 //        encryptedPreferences = new EncryptedPreferences.Builder(this).withEncryptionPassword("MyTestPassword").build();

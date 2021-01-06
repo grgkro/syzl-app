@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/signUpFragment">
+
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="de.stuttgart.syzl3000.authentication.ConfirmFragment"
+        android:label="SignUpFragment" >
+        <action
+            android:id="@+id/viewConfirm"
+            app:destination="@id/confirmFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/confirmFragment"
+        android:name="de.stuttgart.syzl3000.authentication.ConfirmFragment"
+        android:label="ConfirmFragment" />
+
+
+
+</navigation>
